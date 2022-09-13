@@ -1,0 +1,1 @@
+{"name":"Local: temp","url":"/home/livu/Desktop/cp/CP/ABC 267/temp.cpp","tests":[{"id":1662303180059,"input":"3\n4\ncbac\n5 20 10 0\n5\nsadge\n-1 -1 -1 -1 -1\n5\nbcabc\n-10 8 4 15 0","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/livu/Desktop/cp/CP/ABC 267/temp.cpp","group":"local","local":true}

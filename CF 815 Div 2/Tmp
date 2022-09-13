@@ -1,0 +1,34 @@
+#include<bits/stdc++.h>
+using namespace std;
+vector<int>arr;
+vector<vector<int>>dp;
+int coin(int n,int t){
+    if(t==0)return 0;
+    if(n<0)return 1e6;
+    if(dp[n][t]!=-1)return dp[n][t];
+    if(arr[n]<=t){
+    		dp[n][t]=min(1+coin(n,t-arr[n]),coin(n-1,t));
+    }
+    return dp[n][t] = coin(n-1,t);
+}
+
+
+
+
+
+
+int main() {
+	// your code goes here
+	int n,x;cin>>n>>x;
+	arr.resize(n);
+	// dp.resize(n+1,vector<long long int>(x+1,-1));
+	dp.resize(n+1,vector<int>(x+1,-1));
+    int i;
+	for(i=0;i<n;i++){
+	    int z;cin>>z;
+	    arr.push_back(z);
+	}
+	int ab=coin(n-1,x);
+	cout<<ab<<endl;
+	return 0;
+}
