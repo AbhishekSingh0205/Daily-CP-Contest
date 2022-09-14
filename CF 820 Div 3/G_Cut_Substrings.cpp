@@ -1,3 +1,14 @@
+/*
+    We can calculate minimum length greedily.
+    Now calculating the number of ways using DP.
+    Check down below :->
+
+    
+
+
+
+
+*/
 #include <bits/stdc++.h>
 #include<ext/pb_ds/assoc_container.hpp>
 #include<ext/pb_ds/tree_policy.hpp>
@@ -92,6 +103,7 @@ void solve()
     pr(res);
     int i=0;
     int prevTkn=-1;
+    // Calculating the minimum length
     while(i<l){
         if(prevTkn>=res[i].ff){
             i++;C;
@@ -109,7 +121,9 @@ void solve()
         prevTkn=res[i].ss;
         cnt++;i++;
     }
+    
     cout<<cnt<<" ";
+    
     
 }
 int32_t main()
