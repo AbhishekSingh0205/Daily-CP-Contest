@@ -69,48 +69,22 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-string s,t;
 void solve()
 {
-    cin>>s>>t;
-    int n=s.size(),m=t.size();
-    vector<pii>res;
-    for(int i=0;i<n;i++){
-        if(s[i]==t[0]){
-            bool is=false;
-            for(int j=0;j<m;j++){
-                if(s[i+j]!=t[j]){
-                    is=true;
-                    B;
-                }
-            }
-            if(!is) res.pb({i,i+m-1});
+    e2(n,b);e2(x,y);
+    int curr=0;
+    int sum=0;
+    fl(i,0,n){
+        // pr(curr+x,b);
+        if(curr+x<=b){
+            // pr(curr);
+            curr+=x;sum+=curr;
+        }
+        else{
+            curr-=y;sum+=curr;
         }
     }
-    int cnt=0;
-    int l=res.size();
-    pr(res);
-    int i=0;
-    int prevTkn=-1;
-    while(i<l){
-        if(prevTkn>=res[i].ff){
-            i++;C;
-        }
-        if(i+1<l){
-            int currL=res[i].ss;
-            while(i+1<l && res[i+1].ff<=currL){
-                i++;
-            }
-            cnt++;
-            prevTkn=res[i].ss;
-            i++;
-            C;
-        }
-        prevTkn=res[i].ss;
-        cnt++;i++;
-    }
-    cout<<cnt<<" ";
-    
+    cout<<sum<<endl;
 }
 int32_t main()
 {

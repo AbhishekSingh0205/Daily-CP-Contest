@@ -69,48 +69,72 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-string s,t;
 void solve()
 {
-    cin>>s>>t;
-    int n=s.size(),m=t.size();
-    vector<pii>res;
-    for(int i=0;i<n;i++){
-        if(s[i]==t[0]){
-            bool is=false;
-            for(int j=0;j<m;j++){
-                if(s[i+j]!=t[j]){
-                    is=true;
+    e1(n);
+    es(s);
+    map<char,vi>m;
+    fl(i,0,n){
+        m[s[i]].pb(i);
+    }
+    pr(m);
+    int i=0;
+    int op=0,cl=0;
+    int cnt=0;
+    while(i<n){
+        pr("here",i);
+        auto it=UB(all(m[s[i]]),i);
+        pr(*it);
+        if(it!=m[s[i]].end()){
+            int k=*it;
+            op=0,cl=0;
+            int j=i;
+            bool pal=false;
+            while(j<k){
+                if(s[j]=='(') op++;
+                else cl++;
+                if(op==cl && op){
+                    cnt++;
+                    pal=true;
+                    i=j+1;
                     B;
                 }
+                else if(cl>op){
+                    B;
+                }
+                j++;
             }
-            if(!is) res.pb({i,i+m-1});
-        }
-    }
-    int cnt=0;
-    int l=res.size();
-    pr(res);
-    int i=0;
-    int prevTkn=-1;
-    while(i<l){
-        if(prevTkn>=res[i].ff){
-            i++;C;
-        }
-        if(i+1<l){
-            int currL=res[i].ss;
-            while(i+1<l && res[i+1].ff<=currL){
-                i++;
+            if(!pal){
+                cnt++;
+                i=k+1;
             }
-            cnt++;
-            prevTkn=res[i].ss;
-            i++;
-            C;
+            
         }
-        prevTkn=res[i].ss;
-        cnt++;i++;
+        else{
+            op=0;cl=0;
+            int j=i;
+            bool pal=false;
+            while(j<n){
+                if(s[j]=='(') op++;
+                else cl++;
+                if(op==cl && op){
+                    cnt++;
+                    pal=true;
+                    i=j+1;
+                    B;
+                }
+                else if(cl>op){
+                    B;
+                }
+                j++;
+            }
+            if(!pal){
+                cout<<cnt<<" "<<n-i<<endl;R;
+            }
+        }
+        pr("Now",i);
     }
-    cout<<cnt<<" ";
-    
+    cout<<cnt<<" "<<0<<endl;
 }
 int32_t main()
 {
