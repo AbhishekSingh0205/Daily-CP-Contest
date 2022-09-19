@@ -1,22 +1,12 @@
-/*
-    As there are going to be atmax 4e4 qrys means at max there can be 4e4 qrys for each x.
-    At max there can be 4e4 summation of qrys.
-    
-
-    Now we will dfs from root node, at each [src] node, we will caluculate for all the [qrys] whose [x] is [src].
-
-    This will take at max (N + Q)
-    
-*/
 #include <bits/stdc++.h>
+#include<ext/pb_ds/assoc_container.hpp>
+#include<ext/pb_ds/tree_policy.hpp>
 using namespace std;
-#include <ext/pb_ds/assoc_container.hpp> 
-#include <ext/pb_ds/tree_policy.hpp> 
-using namespace __gnu_pbds; 
-#define ordered_set tree<pair<int,int>, null_type,less<pair<int,int>>, rb_tree_tag,tree_order_statistics_node_update>
-#define int long long
-
+using namespace __gnu_pbds;
+#define int long long int
+typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
 // Instead of less<int>, we can use greater<int>, less_equal<int> for descending, and having multiple occurence respectivly
+template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order_statistics_node_update> ;
 #define pb push_back
 #define mp make_pair
 #define fl(i, a, b) for (int i = a; i < b; i++)
@@ -57,7 +47,7 @@ using namespace __gnu_pbds;
 #define NS cout<<"No"<<"\n"
 #define lcm(a,b) (a/__gcd(a,b))*b
 #define pa(a) for(auto e:a)cout<<e<<" "
-const int N = 4e4 + 5;
+const int N = 1e5 + 5;
 int dx[4] = { -1, 1, 0, 0};
 int dy[4] = {0, 0, -1, 1};
 int kx[8] = { -1, 1, 0, 0, -1, -1, 1, 1};
@@ -79,99 +69,71 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-
-struct query{
-    int id;
-    int t,k;
-   
+struct f{
+    string c;
+    int d,id;
 };
-ordered_set st; 
-void dfs(int i,vector<int> &vis,vector<vector<int>> & adj,vector<int> &ene,vector<query>  qr[],vector<int> &ans){
-    vis[i]=1;
-    if(ene[i]){
-    st.insert({ene[i],i});
+bool gada(f a,f b){
+    if(a.c<b.c){
+        return true;
     }
-    for(auto &x:qr[i]){
-        int id = x.id;
-        int t = x.t;
-        int k = x.k;
-        if(st.size()<t){
-            ans[id]=-1;continue;
+    if(a.c==b.c){
+        if(a.id>b.id){
+            return false;
         }
-        auto it = st.find_by_order(st.size()-t);
-        int val = it->first;
-    //     cout<<val<<endl;
-    //    cout<<k<<endl;
-        int low = 1;
-        int high = sqrt(4e18/val);
-        
-        while(low<=high){
-            int mid = (low + high)/2;
-           // cout<<low<<" "<<mid<<" "<<high<<endl;
-            if(val*(mid)*(mid+1) >= 2*k){
-                ans[id]=mid;
-              //  cout<<mid<<" \n";
-                high = mid-1;
-            }
-            else{
-                low = mid+1;
-            }
-        }
-        
+        return true;
     }
-    for(auto &child:adj[i]){
-        if(vis[child]==0){
-            dfs(child,vis,adj,ene,qr,ans);
-        }
+    if(a.c>b.c){
+        return false;
     }
-    if(ene[i]){
-        st.erase({ene[i],i});
-    }
-    
+    return true;
 }
-int32_t main(){
-    int n;
-    cin>>n;
-    vector<int> a(n);
-    for(int i=0;i<n;i++){cin>>a[i];}
-    int l,r;
-    vector<vector<int>> adj(n);
-    for(int i=0;i<n-1;i++){
-        cin>>l>>r;
-        l--;
-        r--;
-        adj[l].push_back(r);
-        adj[r].push_back(l);
+bool gaba(f a,f b){
+    if(a.d<b.d){
+        return true;
     }
-    vector<int> ene(n,0);
+    if(a.d==b.d){
+        if(a.id>b.id){
+            return false;
+        }
+        return true;
+    }
+    if(a.d>b.d){
+        return false;
+    }
+    return true;
+}
+void solve()
+{
+    int n;cin>>n;
+    f a[n];
     for(int i=0;i<n;i++){
-             ene[i]=a[i];
-        for(auto &child:adj[i]){
-            if(a[child]){ene[i]++;}
+        cin>>a[i].c>>a[i].d>>a[i].id;
+    }
+    f b[n];
+    for(int i=0;i<n;i++){
+        b[i]=a[i];
+    }
+    sort(a,a+n,gada);
+    sort(b,b+n,gaba);
+    int cnt=0;
+    for(int i=0;i<n;i++){
+        if(a[i].id==b[i].id){
+            cnt++;
         }
     }
-    int q;
-    cin>>q;
-    vector<int> ans(q);
-    vector<query> qr[n];
-    // q[x] -> x kaunse qrys
-    int i=0;
-    while(q--){
-        int x,k,t;
-        cin>>x>>t>>k;
-        x--;
-        query y;
-        y.id = i;
-        y.k = k;
-        y.t = t;
-        qr[x].push_back(y);
-        i++;
+    cout<<cnt<<endl;
+
+
+}
+int32_t main()
+{
+    ios_base::sync_with_stdio(false);cin.tie(NULL);
+    int t = 1;
+    cin >> t;
+    fl(i, 1, t + 1) {
+        cout<<"Case #"<<i<<": ";
+        solve();
     }
-    vector<int> vis(n,0);
-    dfs(0,vis,adj,ene,qr,ans);
-    for(auto &x:ans){
-        cout<<x<<"\n";
-    }
-    cout<<"\n";
-    
+    return 0;
 }
