@@ -77,7 +77,7 @@ bool is(string s,int i,int j){
         i++;j--;
     }
     return false;
-}x
+}
 void solve()
 {
     es(s);
