@@ -69,28 +69,29 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-bool cmp(vi &a,vi &b){
-    if(a[0]>b[0]){
-        return true;
-    }
-    if(a[0]==b[0]){
-        if(a[1]>b[1]){
-            return true;
-        }
-        return false;
-    }
-    return false;
-}
 void solve()
 {
-    set<pii>st;
-    e3(d,n,x);
-    vvi a(n,vi(3));
-    for(int i=0;i<3;i++){
-        cin>>a[2]>>a[1]>>a[0];
+    e1(n);av(a,n);av(b,n);
+    vi a1,a2;
+    int cnt0=0,cnt1=0;
+    fl(i,0,n){
+        if(a[i]==0){
+            a1.pb(b[i]);
+            cnt0++;
+        }
+        else{
+            cnt1++;
+            a2.pb(b[i]);
+        }
     }
-    // v,l,q
-    sort(all(a),cmp);
+    if(cnt1==0||cnt0==0){
+        int sum=0;
+        fl(i,0,n){
+            sum+=b[i];
+        }
+        cout<<sum<<endl;R;
+    }
+    sort(all(a1));sort(all(a2));
     
 }
 int32_t main()

@@ -69,35 +69,24 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-bool cmp(vi &a,vi &b){
-    if(a[0]>b[0]){
-        return true;
-    }
-    if(a[0]==b[0]){
-        if(a[1]>b[1]){
-            return true;
-        }
-        return false;
-    }
-    return false;
-}
 void solve()
 {
-    set<pii>st;
-    e3(d,n,x);
-    vvi a(n,vi(3));
-    for(int i=0;i<3;i++){
-        cin>>a[2]>>a[1]>>a[0];
+    e3(x,y,z);
+    if(y*x<0||(abs(y)>abs(x))||(z*y>0 && abs(z)<abs(y))){
+        cout<<abs(x)<<endl;
+        R;
     }
-    // v,l,q
-    sort(all(a),cmp);
-    
+    if(x*y>0 && y*z>0 && abs(y)<abs(x) && abs(z)>abs(y)){
+        cout<<-1<<endl;
+        R;
+    }
+    cout<<abs(x)+2*abs(z)<<endl;
 }
 int32_t main()
 {
     ios_base::sync_with_stdio(false);cin.tie(NULL);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

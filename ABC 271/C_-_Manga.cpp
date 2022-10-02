@@ -3,7 +3,7 @@
 #include<ext/pb_ds/tree_policy.hpp>
 using namespace std;
 using namespace __gnu_pbds;
-#define int long long int
+// #define int long long int
 typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
 // Instead of less<int>, we can use greater<int>, less_equal<int> for descending, and having multiple occurence respectivly
 template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order_statistics_node_update> ;
@@ -23,7 +23,7 @@ template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order
 #define mod 1000000007
 #define ff first
 #define ss second
-#define inf 10e15
+#define inf 10e10
 #define all(x) (x).begin(), (x).end()
 #define pii pair<int, int>
 #define mii map<int,int>
@@ -69,35 +69,48 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-bool cmp(vi &a,vi &b){
-    if(a[0]>b[0]){
+bool pos(vi &a,int mid){
+    map<int,int>m;
+    int n=a.size();
+    int cnt=0;
+    fl(i,0,n){
+        if(m[a[i]]==0 && a[i]<=mid){
+            m[a[i]]=1;
+            cnt++;
+        }
+    }
+    if(cnt>=mid){
         return true;
     }
-    if(a[0]==b[0]){
-        if(a[1]>b[1]){
-            return true;
-        }
-        return false;
+    int rem=n-cnt;
+    if(cnt+(rem/2)>=mid){
+        return true;
     }
     return false;
 }
 void solve()
 {
-    set<pii>st;
-    e3(d,n,x);
-    vvi a(n,vi(3));
-    for(int i=0;i<3;i++){
-        cin>>a[2]>>a[1]>>a[0];
+    e1(n);av(a,n);
+    sort(all(a));
+    int l=0,h=10000000;
+    int ans=0;
+    while(l<=h){
+        int mid=(l+h)/2;
+        if(pos(a,mid)){
+            ans=mid;
+            l=mid+1;
+        }
+        else{
+            h=mid-1;
+        }
     }
-    // v,l,q
-    sort(all(a),cmp);
-    
+    cout<<ans<<endl;
 }
 int32_t main()
 {
     ios_base::sync_with_stdio(false);cin.tie(NULL);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

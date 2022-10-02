@@ -69,35 +69,45 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-bool cmp(vi &a,vi &b){
-    if(a[0]>b[0]){
+bool is(int a,int b,int v1,int v2,int v3){
+    if(a==v1||a==v2||a==v3||b==v1||b==v2||b==v3){
         return true;
-    }
-    if(a[0]==b[0]){
-        if(a[1]>b[1]){
-            return true;
-        }
-        return false;
     }
     return false;
 }
 void solve()
 {
-    set<pii>st;
-    e3(d,n,x);
-    vvi a(n,vi(3));
-    for(int i=0;i<3;i++){
-        cin>>a[2]>>a[1]>>a[0];
-    }
-    // v,l,q
-    sort(all(a),cmp);
+    e2(x,y);
     
+    int vis[5];memset(vis,0,sizeof vis);
+    int curr=1;
+    while(x){
+        if(x&1){
+            vis[curr]=1;       
+        }
+        x/=2;curr*=2;
+    }
+    curr=1;
+    while(y){
+        if(y&1){
+            vis[curr]=1;
+        }
+        y/=2;
+        curr*=2;
+    }
+    int sum=0;
+    for(int i=0;i<=4;i++){
+        if(vis[i]){
+            sum+=i;
+        }
+    }
+    cout<<sum<<endl;
 }
 int32_t main()
 {
     ios_base::sync_with_stdio(false);cin.tie(NULL);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

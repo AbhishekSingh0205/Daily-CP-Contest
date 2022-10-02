@@ -47,7 +47,7 @@ template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order
 #define NS cout<<"No"<<"\n"
 #define lcm(a,b) (a/__gcd(a,b))*b
 #define pa(a) for(auto e:a)cout<<e<<" "
-const int N = 1e5 + 5;
+const int N = 2e5 + 5;
 int dx[4] = { -1, 1, 0, 0};
 int dy[4] = {0, 0, -1, 1};
 int kx[8] = { -1, 1, 0, 0, -1, -1, 1, 1};
@@ -69,35 +69,44 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-bool cmp(vi &a,vi &b){
-    if(a[0]>b[0]){
-        return true;
-    }
-    if(a[0]==b[0]){
-        if(a[1]>b[1]){
-            return true;
+int par[N];
+vi gr[N];
+void dfs(int src,int pare){
+    par[src]=pare;
+    for(auto v:gr[src]){
+        if(v!=pare){
+            dfs(v,src);
         }
-        return false;
     }
-    return false;
 }
 void solve()
 {
-    set<pii>st;
-    e3(d,n,x);
-    vvi a(n,vi(3));
-    for(int i=0;i<3;i++){
-        cin>>a[2]>>a[1]>>a[0];
+    e3(n,x,y);
+    x--;y--;
+   
+    for(int i=0;i<n-1;i++){
+        e2(u,v);u--;v--;
+        gr[u].pb(v);
+        gr[v].pb(u);
     }
-    // v,l,q
-    sort(all(a),cmp);
-    
+    dfs(x,-1);
+    vi res;
+    // res.pb(y+1);
+    while(y!=-1){
+        res.pb(y+1);
+        y=par[y];
+    }
+    reverse(all(res));
+    for(auto v:res){
+        cout<<v<<" ";
+    }
+    cout<<endl;
 }
 int32_t main()
 {
     ios_base::sync_with_stdio(false);cin.tie(NULL);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }
