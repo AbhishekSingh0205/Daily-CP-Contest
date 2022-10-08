@@ -69,51 +69,50 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-int parent[26];
-int size[26];
-int par(int x){
-    if(parent[x]==-1){
-        return x;
-    }
-    return parent[x]=par(parent[x]);
-}
-void join(int a,int b){
-    a=par(a);
-    b=par(b);
-    if (a != b) {
-        if (size[a] < size[b])
-            swap(a, b);
-        parent[b] = a;
-        size[a] += size[b];
-    }
-}
-void init(){
-    fl(i,0,26){
-        parent[i]=-1;
-        size[i]=0;
-    }
-}
 void solve()
 {
-    // Kaam krna apna BC kya comment padh rha hai
-    e1(n);es(s);
-    map<char,int>m;
-    init();
+    e2(n,k);es(s);
+    sort(all(s));
+    vector<int>a(26,0);
     fl(i,0,n){
-        if(m.find(s[i])==m.end()){
-            fl(j,0,26){
-                if(j!=s[i]-1 && par(j)!=par(s[i]-'a')){
-                    join(s[i]-'a',j);
-                    m[s[i]]=j;
+        a[s[i]-'a']++;
+    }
+    // pr(a);
+    string ans="";
+    
+    for(int i=0;i<k;i++){
+        int tkn=0;
+        int curr=0;
+        bool done=false;
+        for(curr=0;curr<26;curr++){
+            if(a[curr]==0){
+                ans.pb(char('a'+curr));
+                // pr("here",i,curr);
+                done=true;
+                B;
+            }
+            tkn++;
+            a[curr]--;
+            if(tkn==n/k){
+                B;
+            }
+        }
+        if(done==false){
+            curr++;
+            ans.pb(char('a'+curr));
+            // pr("h",curr,i);
+            int rem=(n/k)-tkn;
+            for(int j=25;j>=0;j--){
+                int mnm=min(rem,a[j]);
+                rem-=mnm;
+                a[j]-=mnm;
+                if(rem==0){
                     B;
                 }
             }
         }
     }
-    fl(i,0,n){
-        cout<<char(m[s[i]]+'a');
-    }
-    cout<<endl;
+    cout<<ans<<endl;
 }
 int32_t main()
 {

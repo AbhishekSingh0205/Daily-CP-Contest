@@ -69,51 +69,102 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-int parent[26];
-int size[26];
-int par(int x){
-    if(parent[x]==-1){
-        return x;
-    }
-    return parent[x]=par(parent[x]);
-}
-void join(int a,int b){
-    a=par(a);
-    b=par(b);
-    if (a != b) {
-        if (size[a] < size[b])
-            swap(a, b);
-        parent[b] = a;
-        size[a] += size[b];
-    }
-}
-void init(){
-    fl(i,0,26){
-        parent[i]=-1;
-        size[i]=0;
-    }
-}
 void solve()
 {
     // Kaam krna apna BC kya comment padh rha hai
-    e1(n);es(s);
-    map<char,int>m;
-    init();
-    fl(i,0,n){
-        if(m.find(s[i])==m.end()){
-            fl(j,0,26){
-                if(j!=s[i]-1 && par(j)!=par(s[i]-'a')){
-                    join(s[i]-'a',j);
-                    m[s[i]]=j;
-                    B;
-                }
+    e1(n);
+    pii a[3];
+    fl(i,0,3){
+        e2(x,y);
+        a[i]={x,y};
+    }
+    map<int,int>mr;
+    map<int,int>mc;
+    e2(r,c);
+    int reqR=-1,reqC=-1;
+    int othR=-1,othC=-1;
+    fl(i,0,3){
+        mr[a[i].ff]++;
+        mc[a[i].ss]++;
+        if(a[i].ff==r && a[i].ss==c){
+            cout<<"YES"<<endl;R;
+        }
+        if(mr[a[i].ff]==2){
+            reqR=a[i].ff;
+        }
+        if(mc[a[i].ss]==2){
+            reqC=a[i].ss;
+        }
+    }
+    fl(i,0,3){
+        if(a[i].ff!=reqR){
+            othR=a[i].ff;
+        }
+    }
+    fl(i,0,3){
+        if(a[i].ss!=reqC){
+            othC=a[i].ss;
+        }
+    }
+    bool done=false;
+    // Case 1 |
+    //        |__
+    if(abs(r-reqR)%2==0){
+        if(c<reqC){
+            cout<<"YES"<<endl;R;
+        }
+        else{
+            if(reqR-1>=1){
+                cout<<"YES"<<endl;
+                R;
             }
         }
     }
-    fl(i,0,n){
-        cout<<char(m[s[i]]+'a');
+    if(abs(c-reqC)%2==0){
+        if(r<reqR){
+            cout<<"YES"<<endl;R;
+        }
+        else{
+            if(reqC-1>=1){
+                cout<<"YES"<<endl;R;
+            }
+        }
     }
-    cout<<endl;
+    // Case 2 |
+    //      __|
+    if(abs(r-reqR)%2==0){
+        if(r>=reqC){
+            cout<<"YES"<<endl;R;
+        }
+        else{
+            if(reqR-1>=1){
+                cout<<"YES"<<endl;R;
+            }
+        }
+    }
+    if(abs(c-reqC)%2==0){
+        
+    }
+    // Case 3 --
+    //        |
+    
+    
+    
+    
+    
+    
+           
+    // Case 4
+    if(abs(c-reqC)%2==0||abs(r-reqR)%2==0){
+        cout<<"YES"<<endl;
+    }
+    else{
+        cout<<"NO"<<endl;
+    }
+
+
+
+
 }
 int32_t main()
 {

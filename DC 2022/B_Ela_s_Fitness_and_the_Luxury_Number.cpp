@@ -69,51 +69,43 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-int parent[26];
-int size[26];
-int par(int x){
-    if(parent[x]==-1){
-        return x;
-    }
-    return parent[x]=par(parent[x]);
-}
-void join(int a,int b){
-    a=par(a);
-    b=par(b);
-    if (a != b) {
-        if (size[a] < size[b])
-            swap(a, b);
-        parent[b] = a;
-        size[a] += size[b];
-    }
-}
-void init(){
-    fl(i,0,26){
-        parent[i]=-1;
-        size[i]=0;
-    }
-}
 void solve()
 {
     // Kaam krna apna BC kya comment padh rha hai
-    e1(n);es(s);
-    map<char,int>m;
-    init();
-    fl(i,0,n){
-        if(m.find(s[i])==m.end()){
-            fl(j,0,26){
-                if(j!=s[i]-1 && par(j)!=par(s[i]-'a')){
-                    join(s[i]-'a',j);
-                    m[s[i]]=j;
-                    B;
-                }
-            }
+    e2(l,r);
+    int sq1=sqrtl(l);
+    int sq2=sqrtl(r);
+    int ans=0;
+    int diff=sq2-sq1+1;
+    int rem=diff-2;
+    // pr(rem);
+    rem=max(rem,0ll);
+    ans+=(rem*3);
+    if(sq1==sq2){
+        ans+=((r/sq1) - (l/sq1));
+        if(l%sq1==0){
+            ans++;
         }
     }
-    fl(i,0,n){
-        cout<<char(m[s[i]]+'a');
+    else{
+        int tf=(sq1+1)*(sq1+1) - 1;
+        tf/=sq1;
+        int lf=l/sq1;
+        ans+=(tf-lf);
+        if(l%sq1==0){
+            ans++;
+        }
+        int tl=(r)/sq2;
+        int ll=sq2;
+        ans+=(tl-ll+1);
     }
-    cout<<endl;
+    cout<<ans<<endl;
+
+
+
+
+
+
 }
 int32_t main()
 {

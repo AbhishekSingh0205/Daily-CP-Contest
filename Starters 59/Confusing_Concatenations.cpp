@@ -69,49 +69,38 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-int parent[26];
-int size[26];
-int par(int x){
-    if(parent[x]==-1){
-        return x;
-    }
-    return parent[x]=par(parent[x]);
-}
-void join(int a,int b){
-    a=par(a);
-    b=par(b);
-    if (a != b) {
-        if (size[a] < size[b])
-            swap(a, b);
-        parent[b] = a;
-        size[a] += size[b];
-    }
-}
-void init(){
-    fl(i,0,26){
-        parent[i]=-1;
-        size[i]=0;
-    }
-}
 void solve()
 {
     // Kaam krna apna BC kya comment padh rha hai
-    e1(n);es(s);
-    map<char,int>m;
-    init();
+    e1(n);av(a,n);
+    set<int>st;
     fl(i,0,n){
-        if(m.find(s[i])==m.end()){
-            fl(j,0,26){
-                if(j!=s[i]-1 && par(j)!=par(s[i]-'a')){
-                    join(s[i]-'a',j);
-                    m[s[i]]=j;
-                    B;
-                }
-            }
+        st.insert(a[i]);
+    }
+    if(st.size()!=n){
+        cout<<-1<<endl;R;
+    }
+    vi a1,a2;
+    bool ans=false;
+    int id=-1;
+    fl(i,1,n){
+        if(a[i]>a[i-1]){
+            id=i;
+            ans=true;
+            B;
         }
     }
-    fl(i,0,n){
-        cout<<char(m[s[i]]+'a');
+    if(id==-1){
+        cout<<-1<<endl;R;
+    }
+    cout<<id<<endl;
+    fl(i,0,id){
+        cout<<a[i]<<" ";
+    }
+    cout<<endl;
+    cout<<n-id<<endl;
+    fl(i,id,n){
+        cout<<a[i]<<" ";
     }
     cout<<endl;
 }
