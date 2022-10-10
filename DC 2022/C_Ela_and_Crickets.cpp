@@ -1,12 +1,12 @@
 #include <bits/stdc++.h>
-#include<ext/pb_ds/assoc_container.hpp>
-#include<ext/pb_ds/tree_policy.hpp>
+// #include<ext/pb_ds/assoc_container.hpp>
+// #include<ext/pb_ds/tree_policy.hpp>
 using namespace std;
-using namespace __gnu_pbds;
+// using namespace __gnu_pbds;
 #define int long long int
-typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
+// typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
 // Instead of less<int>, we can use greater<int>, less_equal<int> for descending, and having multiple occurence respectivly
-template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order_statistics_node_update> ;
+// template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order_statistics_node_update> ;
 #define pb push_back
 #define mp make_pair
 #define fl(i, a, b) for (int i = a; i < b; i++)
@@ -72,8 +72,95 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 void solve()
 {
     // Kaam krna apna BC kya comment padh rha hai
+    e1(n);
+    pii a[3];
+    fl(i,0,3){
+        e2(x,y);
+        a[i]={x,y};
+    }
+    map<int,int>mr;
+    map<int,int>mc;
+    e2(r,c);
+    int reqR=-1,reqC=-1;
+    int othR=-1,othC=-1;
+    fl(i,0,3){
+        mr[a[i].ff]++;
+        mc[a[i].ss]++;
+        if(a[i].ff==r && a[i].ss==c){
+            cout<<"YES"<<endl;R;
+        }
+        if(mr[a[i].ff]==2){
+            reqR=a[i].ff;
+        }
+        if(mc[a[i].ss]==2){
+            reqC=a[i].ss;
+        }
+    }
+    fl(i,0,3){
+        if(a[i].ff!=reqR){
+            othR=a[i].ff;
+        }
+    }
+    fl(i,0,3){
+        if(a[i].ss!=reqC){
+            othC=a[i].ss;
+        }
+    }
+    bool done=false;
+    // Case 1 |
+    //        |__
+    if(abs(r-reqR)%2==0){
+        if(c<reqC){
+            cout<<"YES"<<endl;R;
+        }
+        else{
+            if(reqR-1>=1){
+                cout<<"YES"<<endl;
+                R;
+            }
+        }
+    }
+    if(abs(c-reqC)%2==0){
+        if(r<reqR){
+            cout<<"YES"<<endl;R;
+        }
+        else{
+            if(reqC-1>=1){
+                cout<<"YES"<<endl;R;
+            }
+        }
+    }
+    // Case 2 |
+    //      __|
+    if(abs(r-reqR)%2==0){
+        if(r>=reqC){
+            cout<<"YES"<<endl;R;
+        }
+        else{
+            if(reqR-1>=1){
+                cout<<"YES"<<endl;R;
+            }
+        }
+    }
+    if(abs(c-reqC)%2==0){
+        
+    }
+    // Case 3 --
+    //        |
     
-
+    
+    
+    
+    
+    
+           
+    // Case 4
+    if(abs(c-reqC)%2==0||abs(r-reqR)%2==0){
+        cout<<"YES"<<endl;
+    }
+    else{
+        cout<<"NO"<<endl;
+    }
 
 
 

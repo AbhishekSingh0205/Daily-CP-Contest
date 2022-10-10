@@ -1,3 +1,4 @@
+//Edge Case dekhna BC
 #include <bits/stdc++.h>
 #include<ext/pb_ds/assoc_container.hpp>
 #include<ext/pb_ds/tree_policy.hpp>
@@ -71,13 +72,6 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #endif
 void solve()
 {
-    // Kaam krna apna BC kya comment padh rha hai
-    
-
-
-
-
-
 }
 int32_t main()
 {

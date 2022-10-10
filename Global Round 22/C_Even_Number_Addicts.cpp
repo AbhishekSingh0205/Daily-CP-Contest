@@ -140,15 +140,15 @@ void solve()
     else if(o.size()==n && n%2){
         cout<<"Alice"<<endl;R;
     }
-    // for(int i=0;i<e.size();i++){
-    //     for(int j=0;j<o.size();j++){
-    //         for(int k=0;k<o.size();k++){
-    //             dp[i][j][k][0]=-1;
-    //             dp[i][j][k][1]=-1;
-    //         }
-    //     }
-    // }
-    memset(dp,-1,sizeof dp);
+    for(int i=0;i<e.size();i++){
+        for(int j=0;j<o.size();j++){
+            for(int k=0;k<o.size();k++){
+                dp[i][j][k][0]=-1;
+                dp[i][j][k][1]=-1;
+            }
+        }
+    }
+    // memset(dp,-1,sizeof dp);
     int ans=rec(0,0,0,0);
     if(ans){
         cout<<"Alice"<<endl;R;

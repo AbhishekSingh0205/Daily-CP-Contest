@@ -1,3 +1,4 @@
+-// Edge Case dekhna BC
 #include <bits/stdc++.h>
 #include<ext/pb_ds/assoc_container.hpp>
 #include<ext/pb_ds/tree_policy.hpp>
@@ -9,7 +10,7 @@ typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_
 template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order_statistics_node_update> ;
 #define pb push_back
 #define mp make_pair
-#define fl(i, a, b) for (int i = a; i < b; i++)
+#define rep(i, a, b) for (int i = a; i < b; i++)
 #define vi vector<int>
 #define e1(a) int a; cin>>a;
 #define e2(a,b) int a,b; cin>>a>>b;
@@ -69,23 +70,45 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
+
+int f(int x, int a){
+    set<int> st;
+    rep(i, 1, x){
+        if(i*i > x) break;
+        if(x % i == 0){
+            st.insert(i);
+            st.insert(x / i);
+        }
+    }
+    return *st.lower_bound(a);
+}
+
 void solve()
 {
-    // Kaam krna apna BC kya comment padh rha hai
-    
-
-
-
-
-
+    int a, b; cin >> a >> b;
+    if(a >= b)  cout << a - b;
+    else{
+        int mn = (a - (b%a))%a;
+        rep(x, b + a, b + a + mn){
+            if(f(x, a) + b <= x){
+                cout << x - a - b;
+                cout << '\n';
+                return;
+            }
+        }
+        cout << mn << endl;
+    }
 }
 int32_t main()
 {
     ios_base::sync_with_stdio(false);cin.tie(NULL);
     int t = 1;
     cin >> t;
-    fl(i, 1, t + 1) {
+    rep(i, 1, t + 1) {
         solve();
     }
     return 0;
 }
+
+//Is logic se tle ayega, editorial dekh, samajh aye to mujhe bhi samjha 
+                                                                    //~You know who

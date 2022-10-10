@@ -1,3 +1,4 @@
+
 #include <bits/stdc++.h>
 #include<ext/pb_ds/assoc_container.hpp>
 #include<ext/pb_ds/tree_policy.hpp>
@@ -71,13 +72,104 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #endif
 void solve()
 {
-    // Kaam krna apna BC kya comment padh rha hai
-    
-
-
-
-
-
+    e2(n,k);es(s);    
+    int fst=-1,lst=-1;
+    for(int i=0;i<n;i++){
+        if(s[i]=='1'){
+            fst=i;B;
+        }
+    }
+    for(int i=n-1;i>=0;i--){
+        if(s[i]=='1'){
+            lst=i;B;
+        }
+    }
+    // Atleast two ones.
+    if(fst!=lst){
+        for(int i=fst;i<lst;i++){
+            if(s[i]=='0'){
+                cout<<"No"<<endl;R;
+            }
+        }
+        if(lst-fst+1==k){
+            cout<<"Yes"<<endl;R;
+        }
+        if(lst-fst+1>k){
+            cout<<"No"<<endl;R;
+        }
+        // int cnt=0;
+        int prev=0;
+        int curr=fst-1;
+        while(curr>=0 && s[curr]=='?'){
+            prev++;
+            curr--;
+        }
+        curr=lst+1;
+        int next=0;
+        while(curr<n && s[curr]=='?'){
+            next++;
+            curr++;
+        }
+        int temp=lst-fst+1;
+        if(temp+next+prev==k){
+            cout<<"Yes"<<endl;R;
+        }
+        else if((next==0||prev==0) && temp+next+prev>=k){
+            cout<<"Yes"<<endl;R;
+        }
+        else{
+            cout<<"No"<<endl;
+        }
+    }
+    // Only one 1.
+    else if(fst==lst && fst!=-1){
+        int cntp=0;
+        if(k==1){
+            cout<<"Yes"<<endl;R;
+        }
+        int curr=fst-1;
+        while(curr>=0 && s[curr]=='?'){
+            cntp++;
+            curr--;
+        }
+        int prev=cntp;
+        int next=0;
+        curr=fst+1;
+        while(curr<n && s[curr]=='?'){
+            next++;
+            curr++;
+        }
+        if(next+prev+1==k){
+            cout<<"Yes"<<endl;R;
+        }
+        else if((next==0||prev==0) && next+prev+1>=k){
+            cout<<"Yes"<<endl;R;
+        }
+        else cout<<"No"<<endl;R;
+    }
+    // No one.
+    else{
+        int a[n];
+        int cntk=0;
+        memset(a,0,sizeof a);
+        fl(i,0,n){
+            if(s[i]=='?'){
+                a[i]++;
+            }
+            if(i && a[i]){
+                a[i]+=a[i-1];
+            }
+            if(a[i]>=k){
+                cntk++;
+            }
+        }
+        if(cntk==1){
+            cout<<"Yes"<<endl;
+        }
+        else{
+            cout<<"No"<<endl;
+        }
+    }
 }
 int32_t main()
 {

@@ -1,12 +1,12 @@
 #include <bits/stdc++.h>
-#include<ext/pb_ds/assoc_container.hpp>
-#include<ext/pb_ds/tree_policy.hpp>
+// #include<ext/pb_ds/assoc_container.hpp>
+// #include<ext/pb_ds/tree_policy.hpp>
 using namespace std;
-using namespace __gnu_pbds;
+// using namespace __gnu_pbds;
 #define int long long int
-typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
+// typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
 // Instead of less<int>, we can use greater<int>, less_equal<int> for descending, and having multiple occurence respectivly
-template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order_statistics_node_update> ;
+// template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order_statistics_node_update> ;
 #define pb push_back
 #define mp make_pair
 #define fl(i, a, b) for (int i = a; i < b; i++)
@@ -72,12 +72,37 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 void solve()
 {
     // Kaam krna apna BC kya comment padh rha hai
-    
-
-
-
-
-
+    e1(n);av(a,n);
+    set<int>st;
+    fl(i,0,n){
+        st.insert(a[i]);
+    }
+    if(st.size()!=n){
+        cout<<-1<<endl;R;
+    }
+    vi a1,a2;
+    bool ans=false;
+    int id=-1;
+    fl(i,1,n){
+        if(a[i]>a[i-1]){
+            id=i;
+            ans=true;
+            B;
+        }
+    }
+    if(id==-1){
+        cout<<-1<<endl;R;
+    }
+    cout<<id<<endl;
+    fl(i,0,id){
+        cout<<a[i]<<" ";
+    }
+    cout<<endl;
+    cout<<n-id<<endl;
+    fl(i,id,n){
+        cout<<a[i]<<" ";
+    }
+    cout<<endl;
 }
 int32_t main()
 {

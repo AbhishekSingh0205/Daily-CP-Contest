@@ -1,12 +1,12 @@
 #include <bits/stdc++.h>
-#include<ext/pb_ds/assoc_container.hpp>
-#include<ext/pb_ds/tree_policy.hpp>
+// #include<ext/pb_ds/assoc_container.hpp>
+// #include<ext/pb_ds/tree_policy.hpp>
 using namespace std;
-using namespace __gnu_pbds;
+// using namespace __gnu_pbds;
 #define int long long int
-typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
+// typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
 // Instead of less<int>, we can use greater<int>, less_equal<int> for descending, and having multiple occurence respectivly
-template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order_statistics_node_update> ;
+// template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order_statistics_node_update> ;
 #define pb push_back
 #define mp make_pair
 #define fl(i, a, b) for (int i = a; i < b; i++)
@@ -72,7 +72,35 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 void solve()
 {
     // Kaam krna apna BC kya comment padh rha hai
-    
+    e2(l,r);
+    int sq1=sqrtl(l);
+    int sq2=sqrtl(r);
+    int ans=0;
+    int diff=sq2-sq1+1;
+    int rem=diff-2;
+    // pr(rem);
+    rem=max(rem,0ll);
+    ans+=(rem*3);
+    if(sq1==sq2){
+        ans+=((r/sq1) - (l/sq1));
+        if(l%sq1==0){
+            ans++;
+        }
+    }
+    else{
+        int tf=(sq1+1)*(sq1+1) - 1;
+        tf/=sq1;
+        int lf=l/sq1;
+        ans+=(tf-lf);
+        if(l%sq1==0){
+            ans++;
+        }
+        int tl=(r)/sq2;
+        int ll=sq2;
+        ans+=(tl-ll+1);
+    }
+    cout<<ans<<endl;
+
 
 
 

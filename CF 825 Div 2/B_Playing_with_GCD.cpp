@@ -1,3 +1,4 @@
+//Edge Case dekhna BC
 #include <bits/stdc++.h>
 #include<ext/pb_ds/assoc_container.hpp>
 #include<ext/pb_ds/tree_policy.hpp>
@@ -69,15 +70,44 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
+int gcd (int a, int b) {
+    if (b == 0)
+        return a;
+    else
+        return gcd (b, a % b);
+}
+
 void solve()
 {
-    // Kaam krna apna BC kya comment padh rha hai
+    e1(n);av(a,n);
+    if(n==1){
+        cout<<"YES"<<endl;R;
+    }
     
-
-
-
-
-
+    int g=a[0];
+    fl(i,0,n){
+        g=gcd(g,a[i]);
+    }
+    vi b(n+1,g);
+    bool is=true;
+    fl(i,0,n){
+        int g1=gcd(a[i],b[i]);
+        int g2=gcd(a[i],b[i+1]);
+        b[i]*=(a[i]/g1);
+        b[i+1]*=(a[i]/g2);
+        if(i){
+            if(gcd(b[i],b[i-1])!=a[i-1]){
+                is=false;
+                B;
+            }
+        }
+    }
+    if(is){
+        cout<<"YES"<<endl;R;
+    }
+    else{
+        cout<<"NO"<<endl;R;
+    }
 }
 int32_t main()
 {

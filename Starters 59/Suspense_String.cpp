@@ -1,12 +1,12 @@
 #include <bits/stdc++.h>
-#include<ext/pb_ds/assoc_container.hpp>
-#include<ext/pb_ds/tree_policy.hpp>
+// #include<ext/pb_ds/assoc_container.hpp>
+// #include<ext/pb_ds/tree_policy.hpp>
 using namespace std;
-using namespace __gnu_pbds;
+// using namespace __gnu_pbds;
 #define int long long int
-typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
+// typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
 // Instead of less<int>, we can use greater<int>, less_equal<int> for descending, and having multiple occurence respectivly
-template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order_statistics_node_update> ;
+// template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order_statistics_node_update> ;
 #define pb push_back
 #define mp make_pair
 #define fl(i, a, b) for (int i = a; i < b; i++)
@@ -72,8 +72,37 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 void solve()
 {
     // Kaam krna apna BC kya comment padh rha hai
-    
-
+    e1(n);es(s);    
+    string t="";
+    bool a=true;
+    int i=0,j=n-1;
+    while(i<=j){
+        if(a){
+            string x="";
+            x.pb(s[i]);
+            if(t+x<x+t){
+                t=t+x;
+            }
+            else{
+                t=x+t;
+            }
+            a=false;
+            i++;
+        }
+        else{
+            string x="";
+            x.pb(s[j]);
+            if(t+x>x+t){
+                t=t+x;
+            }
+            else{
+                t=x+t;
+            }
+            j--;
+            a=true;
+        }
+    }
+    cout<<t<<endl;
 
 
 

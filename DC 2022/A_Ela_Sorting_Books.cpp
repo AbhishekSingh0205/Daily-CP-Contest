@@ -1,12 +1,12 @@
 #include <bits/stdc++.h>
-#include<ext/pb_ds/assoc_container.hpp>
-#include<ext/pb_ds/tree_policy.hpp>
+// #include<ext/pb_ds/assoc_container.hpp>
+// #include<ext/pb_ds/tree_policy.hpp>
 using namespace std;
-using namespace __gnu_pbds;
+// using namespace __gnu_pbds;
 #define int long long int
-typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
+// typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
 // Instead of less<int>, we can use greater<int>, less_equal<int> for descending, and having multiple occurence respectivly
-template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order_statistics_node_update> ;
+// template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order_statistics_node_update> ;
 #define pb push_back
 #define mp make_pair
 #define fl(i, a, b) for (int i = a; i < b; i++)
@@ -71,13 +71,48 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #endif
 void solve()
 {
-    // Kaam krna apna BC kya comment padh rha hai
+    e2(n,k);es(s);
+    sort(all(s));
+    vector<int>a(26,0);
+    fl(i,0,n){
+        a[s[i]-'a']++;
+    }
+    // pr(a);
+    string ans="";
     
-
-
-
-
-
+    for(int i=0;i<k;i++){
+        int tkn=0;
+        int curr=0;
+        bool done=false;
+        for(curr=0;curr<26;curr++){
+            if(a[curr]==0){
+                ans.pb(char('a'+curr));
+                // pr("here",i,curr);
+                done=true;
+                B;
+            }
+            tkn++;
+            a[curr]--;
+            if(tkn==n/k){
+                B;
+            }
+        }
+        if(done==false){
+            curr++;
+            ans.pb(char('a'+curr));
+            // pr("h",curr,i);
+            int rem=(n/k)-tkn;
+            for(int j=25;j>=0;j--){
+                int mnm=min(rem,a[j]);
+                rem-=mnm;
+                a[j]-=mnm;
+                if(rem==0){
+                    B;
+                }
+            }
+        }
+    }
+    cout<<ans<<endl;
 }
 int32_t main()
 {
