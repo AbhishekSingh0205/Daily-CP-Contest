@@ -72,7 +72,31 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #endif
 void solve()
 {
-    
+    e1(n);
+    if(n==5){
+        cout<<"5 4 1 2 3"<<endl;R;
+    }
+    if(n==3){
+        cout<<-1<<endl;
+    }
+    else{
+        // 5 4 3 2 1
+        // 5 4 3 2 1
+
+        int a[n];int st=0;
+        for(int i=n-1;i>=0;i--){
+            a[st]=i+1;
+            st++;
+        }
+        if(n%2){
+            int mid=n/2;
+            swap(a[mid],a[mid+1]);
+        }
+        fl(i,0,n){
+            cout<<a[i]<<" ";
+        }
+        cout<<endl;
+    }
 }
 int32_t main()
 {

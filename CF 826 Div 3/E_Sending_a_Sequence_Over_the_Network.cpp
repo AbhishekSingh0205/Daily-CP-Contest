@@ -4,7 +4,7 @@
 #include<ext/pb_ds/tree_policy.hpp>
 using namespace std;
 using namespace __gnu_pbds;
-#define int long long int
+// #define int long long int
 typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
 // Instead of less<int>, we can use greater<int>, less_equal<int> for descending, and having multiple occurence respectivly
 template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order_statistics_node_update> ;
@@ -48,7 +48,7 @@ template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order
 #define NS cout<<"No"<<"\n"
 #define lcm(a,b) (a/__gcd(a,b))*b
 #define pa(a) for(auto e:a)cout<<e<<" "
-const int N = 1e5 + 5;
+const int N = 2e5 + 5;
 int dx[4] = { -1, 1, 0, 0};
 int dy[4] = {0, 0, -1, 1};
 int kx[8] = { -1, 1, 0, 0, -1, -1, 1, 1};
@@ -70,9 +70,32 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
+bool flag=false;
+// set<int>st;
 void solve()
 {
+    int n;
+    cin >> n;
+    vector<int> v(n+1),dp(n+1,0);
+    dp[0] = 1;
+    for(int i=1 ; i<=n ; ++i) cin >> v[i];
+ 
+    for(int i=1 ; i<=n ; ++i){
+        // if this is right end of segment
+        if(i-(v[i]+1)>=0 && dp[i-(v[i]+1)]){
+            dp[i] = 1;
+        }
+        if(i+v[i]<=n && dp[i-1]==1){
+            dp[i+v[i]] = 1;
+        }
+    }
     
+    if(dp[n]){
+        cout<<"Yes"<<endl;
+    }  
+    else{
+        cout<<"No"<<endl;
+    }
 }
 int32_t main()
 {

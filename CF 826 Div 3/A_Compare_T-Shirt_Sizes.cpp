@@ -72,7 +72,56 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #endif
 void solve()
 {
-    
+    es(a);es(b);
+    string c="SML";
+    if(a[a.size()-1]!=b[b.size()-1]){
+        int id1=-1,id2=-1;
+        fl(i,0,3){
+            if(c[i]==a[a.size()-1]){
+                id1=i;
+            }
+            if(c[i]==b[b.size()-1]){
+                id2=i;
+            }
+        } 
+        if(id1>id2){
+            cout<<">";
+        }
+        else{
+            cout<<"<";
+        }
+        cout<<endl;
+        R;
+    }
+    else{
+        if(a[a.size()-1]=='M'){
+            cout<<"=";
+            el;
+            R;
+        }
+        else{
+            int cnt1=0;
+            if(a.size()==b.size()){
+                cout<<"=";el;
+            }
+            else if(a[a.size()-1]=='S'){
+                if(a.size()>b.size()){
+                    cout<<"<";el;
+                }
+                else{
+                    cout<<">";el;
+                }
+            }
+            else{
+                if(a.size()>b.size()){
+                    cout<<">";el;
+                }
+                else{
+                    cout<<"<";el;
+                }
+            }
+        }
+    }
 }
 int32_t main()
 {

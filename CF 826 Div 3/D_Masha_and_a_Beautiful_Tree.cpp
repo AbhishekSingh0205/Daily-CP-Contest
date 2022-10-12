@@ -72,7 +72,61 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #endif
 void solve()
 {
-    
+    e1(n);
+    int a[n];
+    fl(i,0,n){
+        cin>>a[i];
+    }
+    int curr=1;
+    int sz=n;
+    int ans=0;
+    bool flag=false;
+    while(sz-1>=0){
+        vector<int>tmp;
+        // for(int i=0;i<n-1;i++){
+        //     if(a[i]-a[i+1]!=curr){
+        //         flag=true;
+        //     }
+        // }
+        int currL=0;
+        while(currL<sz-1){
+            int diff=a[currL]-a[currL+1];
+            if(diff<0){
+                diff*=-1;
+            }
+            if(diff==curr){
+                if(a[currL]-a[currL+1]>0){
+                    ans=ans+1;
+                }
+                if(a[currL]){
+                    int mnm=min(a[currL],a[currL+1]);
+                    tmp.pb(mnm);
+                }
+            }
+            else{
+                flag=true;
+                B;
+            }
+            // pr("inside");
+            currL+=2;
+        }
+        // pr("out",currL,sz);
+        // for(int i=0;i<n-1;i+=2){
+        //     if(a[i]-a[i+1]!=curr){
+        //         flag=true;
+        //     }
+        // }
+        sz=tmp.size();
+        for(int i=0;i<sz;i++){
+            a[i]=tmp[i];
+        }
+        curr=curr*2;
+    }
+    if(flag==false){
+        cout<<ans<<endl;R;
+    }
+    cout<<-1<<endl;
+
 }
 int32_t main()
 {

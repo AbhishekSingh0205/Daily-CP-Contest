@@ -72,7 +72,33 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #endif
 void solve()
 {
-    
+    e1(n);av(a,n);
+    int ans=n;
+    int sum=0;
+    fl(i,0,n){
+        sum+=a[i];
+        pr(sum);
+        int prev=i;
+        int tmp=i+1;
+        int curr=0;
+        bool is=true;
+        fl(j,i+1,n){
+            curr+=a[j];
+            if(curr==sum){
+                tmp=max(tmp,j-prev);
+                prev=j;
+                curr=0;
+            }
+            else if(curr>sum){
+                is=false;B;
+            }
+        }
+        if(is && curr==0){
+            // pr("here");
+            ans=min(ans,tmp);
+        }
+    }
+    cout<<ans<<endl;
 }
 int32_t main()
 {
