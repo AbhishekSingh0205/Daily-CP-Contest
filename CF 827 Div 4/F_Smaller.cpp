@@ -70,99 +70,57 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-
-vector<vector<int>>a;
-struct NODE{
-    // Can be modified according to the question.
-    int ans;
-    // Setting the value for default value.
-    NODE():ans(INT_MAX){}
-};
-NODE segTree[4*N];
-NODE combine(NODE a,NODE b,bool f){
-    // Can be modified according to the question.
-    NODE c;
-    if(f){
-        c.ans=max(a.ans,b.ans);
-    }
-    else{
-        c.ans=min(a.ans,b.ans);
-    }
-    return c;
-}
-void build(int node,int start,int end,bool f){
-    if(start==end){
-        // Can be changed according to the question
-        int res=0;
-        if(f){
-            res=INT_MIN;
-        }
-        else{
-            res=INT_MAX;
-        }
-        segTree[node].ans=res;
-        return;
-    }
-    int mid=(start+end)/2;
-    build(2*node,start,mid,f);
-    build(2*node+1,mid+1,end,f);
-    segTree[node]=combine(segTree[2*node],segTree[2*node+1],f);
-}
-// Single Value update -> update1
-void update1(int node,int start,int end,int ind,int val,bool f){
-    if(start==end){
-        // Can be changed according to the question
-        if(f){
-            segTree[node].ans=max(segTree[node].ans,val);
-        }
-        else{
-            segTree[node].ans=min(segTree[node].ans,val);
-        }
-        return;
-    }
-    int mid=(start+end)/2;
-    if(ind>mid){
-        update1(2*node+1,mid+1,end,ind,val,f);
-    }
-    else{
-        update1(2*node,start,mid,ind,val,f);
-    }
-    segTree[node]=combine(segTree[2*node],segTree[2*node+1],f);
-}
-// query without lazy propagation.
-NODE query(int node,int start,int end,int l,int r,bool f){
-    // First case out of bound, means (l,r) range is not in (start,end)
-    if(start>r||end<l){
-        return NODE();
-    }
-    // If (l,r) is inside (start,end)
-    if(start>=l && end<=r){
-        return segTree[node];
-    }
-    int mid=(start+end)/2;
-    NODE lq=query(2*node,start,mid,l,r,f);
-    NODE rq=query(2*node+1,mid+1,end,l,r,f);
-    return combine(lq,rq,f);
-}
 void solve()
 {
-    int n;cin>>n;
-    a.clear();
-    a.resize(0);
-    a.resize(n,vi(4));
-    fl(i,0,n){
-        e3(l,r,c);
-        a[i]={l,r,c,i};
-    }
-    sort(all(a));
-    // build the segment tree from left to right. With maximum r, for each color. Ranges would be color rather than l or r.
-    // Initially for maximum r, I would initilize them with INT_MIN
-    build(1,0,n-1,true);
-    int res[n];
-    bool f=true;
-    for(int i=0;i<n;i++){
-        int num=a[i][2];
-        
+    e1(q);
+    int cnts[26],cntt[26];
+    memset(cnts,0,sizeof cnts);
+    memset(cntt,0,sizeof cntt);
+    cnts[0]=1;
+    cntt[0]=1;
+    fl(i,0,q){
+        e2(tp,k);
+        es(s);
+        fl(j,0,s.size()){
+            if(tp==1){
+                cnts[s[j]-'a']+=k;
+            }
+            else{
+                cntt[s[j]-'a']+=k;
+            }
+        }
+        bool is=false;
+        int sum1=0,sum2=0;
+        fl(j,1,26){
+            if(cntt[j]){
+                is=true;
+                B;
+            }
+        }
+        if(is){
+            cout<<"YES"<<endl;
+            C;
+        }
+        sum1=cnts[0];
+        sum2=cntt[0];
+        bool is2=false;
+        fl(j,1,26){
+            if(cnts[j]){
+                is2=true;
+            }
+        }
+        if(is2){
+            cout<<"NO"<<endl;
+            C;
+        }
+        if(sum1<sum2){
+            cout<<"YES"<<endl;
+            C;
+        }
+        else{
+            cout<<"NO"<<endl;
+            C;
+        }
     }
 }
 int32_t main()
