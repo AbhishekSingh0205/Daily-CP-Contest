@@ -71,46 +71,73 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-bool cmp(pii a,pii b){
-    // (l,val)
-    // Case 1 : Given is correct position.
-    if(a.ff*b.ss>b.ff*a.ss){
-        return true;
-    }
-    else{
-        return false;
-    }
-}
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
     /*
-        Wrong approach : See sample test case 1:
-                        Greedily sort krdenge beauty and lenght wise.
-                        It will be sorted on the basis of beauty, less the beauty lesser will be the position.🥺🥺
+        Logic(🤔): 
+            Basically we solve it bit by bit iterating from 0th bit.
+            In inputs I will be having bits of A and B at ith position, and 
+            one carry which will be moving forward.
+            Let's say :
+                        1 1->Carry bhi hai.
+                       +1
+                        0 Is case mein Ye suit follow nhi kr rha, to hum  (2^i) se extra xor krenge, it means ki yha pe ith bit of X will be 1.
 
-        
-        
+                        1 0->Carry
+                       +1   Is case mein ith bit of X=0, and 1 carry will be 
+                        0   passed to next term.
 
+
+
+                        1 Ya 0 with 0 carry 
+                       +0   +1  Is case mein ith bit of X=0
+                        1    1   
+
+                        1 Ya 0 with 0 carry
+                       +0   +1 Is case mien ith bit of X=1
+                        0    0
+
+            Basically 0th bit se solve krenge with carry taken in count.
     */
-    e1(n);
-    av(l,n);
-    av(b,n);
-    vector<pii> a(n);
-    fl(i,0,n){
-        a[i]={l[i],b[i]};
+    e3(a,b,c);
+    int carry=0;
+    int bitN=0;
+    while(a||b||c){
+        // pr(bitN);
+        int inp1=((a%2)+(b%2)+carry);
+        int out1=c%2;
+        // pr("CC",carry);
+        if((inp1%2)==out1){
+            carry=(inp1)/2;
+        }
+        else{
+            for(int i=0;i<2;i++){
+                inp1=(((a%2)^i)+((b%2)^i)+carry);
+                out1=((c%2)^i);
+                // pr("NT",inp1,out1);
+                if((inp1%2)==out1){
+                    B;
+                }
+            }
+            if((inp1%2)==out1){
+                carry=inp1/2;
+            }
+            else{
+                cout<<"NO"<<endl;R;
+            }
+        }
+        // pr(inp1,out1);
+        // pr("GC",carry);
+        bitN++;
+        a/=2;
+        b/=2;
+        c/=2;
     }
-    sort(all(a),cmp);
-    // pr(a);
-    int sum=0;
-    int len=0;
-    for(int i=0;i<n;i++){
-        sum+=(len*a[i].ss);
-        len+=a[i].ff;
+    if(carry){
+        cout<<"NO"<<endl;R;
     }
-    cout<<sum<<endl;
-    
-
+    cout<<"YES"<<endl;
 
 
 

@@ -71,45 +71,75 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-bool cmp(pii a,pii b){
-    // (l,val)
-    // Case 1 : Given is correct position.
-    if(a.ff*b.ss>b.ff*a.ss){
-        return true;
+class priortize{
+    public:bool operator()(pii p1,pii p2){
+        return p1.ss>p2.ss;
     }
-    else{
-        return false;
+};
+// Assuming n,m and graph gr is global.
+int dis[N];
+int vis[N];
+// For storing the path
+int parU[N];//parent of U is ->parU
+string s;
+int n;
+void dijikstra(int src){
+    // Reseting each node
+    for(int i=0;i<n;i++){
+        dis[i]=inf;
+        vis[i]=0;
+        parU[i]=-1;
     }
+    int len[10];
+    memset(len,0,sizeof len);
+    for(int i=0;i<n;i++){
+        if(s[src]==s[i]){
+            dis[i]=1;
+        }
+    }
+    dis[src]=0;
+    // pii->{node,dis_from_src}
+    priority_queue<pii,vector<pii>,priortize>pq;
+    pq.push(mp(src,0));
+    while(!pq.empty()){
+        pii fr=pq.top();
+        pq.pop();
+        // If once that node is relaxed then we will not take that not again.
+        if(vis[fr.ff]){
+            C;
+        }
+        // pr(fr);
+        // Else we will process
+        vis[fr.ff]=1;
+        if(len[s[fr.ff]-'0']==0){
+            len[s[fr.ff]-'0']=1;
+            for(int i=0;i<n;i++){
+                if(s[fr.ff]==s[i] && i!=fr.ff){
+                    dis[i]=min(dis[i],dis[fr.ff]+1);
+                    pq.push(mp(i,dis[i]));
+                }
+            }
+        }
+        if(fr.ff-1>=0 && vis[fr.ff-1]==0 && dis[fr.ff-1]>dis[fr.ff]+1){
+            dis[fr.ff-1]=dis[fr.ff]+1;
+            pq.push(mp(fr.ff-1,dis[fr.ff]+1));
+        }
+        if(fr.ff+1<n && vis[fr.ff+1]==0 && dis[fr.ff+1]>dis[fr.ff]+1){
+            dis[fr.ff+1]=dis[fr.ff]+1;
+            pq.push(mp(fr.ff+1,dis[fr.ff]+1));
+        }
+    }
+    // parU will tell us the path.
 }
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    /*
-        Wrong approach : See sample test case 1:
-                        Greedily sort krdenge beauty and lenght wise.
-                        It will be sorted on the basis of beauty, less the beauty lesser will be the position.🥺🥺
-
-        
-        
-
-    */
-    e1(n);
-    av(l,n);
-    av(b,n);
-    vector<pii> a(n);
-    fl(i,0,n){
-        a[i]={l[i],b[i]};
-    }
-    sort(all(a),cmp);
-    // pr(a);
-    int sum=0;
-    int len=0;
-    for(int i=0;i<n;i++){
-        sum+=(len*a[i].ss);
-        len+=a[i].ff;
-    }
-    cout<<sum<<endl;
-    
+    cin>>s;
+    n=s.size();
+    int vis[10];memset(vis,0,sizeof vis);
+    dijikstra(0);
+    // pra(dis,n);
+    cout<<dis[n-1]<<endl;    
 
 
 
@@ -121,7 +151,7 @@ int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    cin >> t;
+    // cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

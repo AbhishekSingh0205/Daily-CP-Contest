@@ -71,47 +71,47 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-bool cmp(pii a,pii b){
-    // (l,val)
-    // Case 1 : Given is correct position.
-    if(a.ff*b.ss>b.ff*a.ss){
-        return true;
-    }
-    else{
-        return false;
-    }
-}
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    /*
-        Wrong approach : See sample test case 1:
-                        Greedily sort krdenge beauty and lenght wise.
-                        It will be sorted on the basis of beauty, less the beauty lesser will be the position.🥺🥺
+    int n; cin>>n;
+	if (n%4==0){
+		vi a, b;
+		fl(i,1,n+1){
+			if (i%4==1 || i%4==0) a.pb(i);
+			else b.pb(i);
+		}
+		cout<<"YES";
+        cout<<endl;
+		cout<<a.size()<<endl;
+		for (auto i: a) cout<<i<<" ";
+		cout<<endl;
+        cout<<b.size()<<endl;
+		for (auto i: b) cout<<i<<" ";
+	}
+	else if (n%4==3){
+		vi a, b;
+		a.pb(1);
+        a.pb(2);
+        b.pb(3);
+        fl(i,4,n+1){
+            if(i%4==0||i%4==1){
+                a.pb(i);
+            }
+            else{
+                b.pb(i);
+            }
+        }
+        cout<<"YES";
+        cout<<endl;
+		cout<<a.size()<<endl;
+		for (auto i: a) cout<<i<<" ";
+		cout<<endl;
+        cout<<b.size()<<endl;
+		for (auto i: b) cout<<i<<" ";
 
-        
-        
-
-    */
-    e1(n);
-    av(l,n);
-    av(b,n);
-    vector<pii> a(n);
-    fl(i,0,n){
-        a[i]={l[i],b[i]};
-    }
-    sort(all(a),cmp);
-    // pr(a);
-    int sum=0;
-    int len=0;
-    for(int i=0;i<n;i++){
-        sum+=(len*a[i].ss);
-        len+=a[i].ff;
-    }
-    cout<<sum<<endl;
-    
-
-
+	}
+	else cout<<"NO"<<endl;
 
 
 
@@ -121,7 +121,7 @@ int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    cin >> t;
+    // cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

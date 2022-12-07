@@ -49,7 +49,7 @@ template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order
 #define NS cout<<"No"<<"\n"
 #define lcm(a,b) (a/__gcd(a,b))*b
 #define pa(a) for(auto e:a)cout<<e<<" "
-const int N = 1e5 + 5;
+const int N = 2e5 + 5;
 int dx[4] = { -1, 1, 0, 0};
 int dy[4] = {0, 0, -1, 1};
 int kx[8] = { -1, 1, 0, 0, -1, -1, 1, 1};
@@ -71,45 +71,79 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-bool cmp(pii a,pii b){
-    // (l,val)
-    // Case 1 : Given is correct position.
-    if(a.ff*b.ss>b.ff*a.ss){
-        return true;
+class priortize{
+    public:bool operator()(pii p1,pii p2){
+        return p1.ss>p2.ss;
     }
-    else{
-        return false;
+};
+int n,m,k;
+vector<pii> gr[N];
+// Assuming n,m and graph gr is global.
+int dis[N];
+int vis[N];
+vector<pii>val;
+// For storing the path
+int parU[N];//parent of U is ->parU
+void dijikstra(){
+    // Reseting each node
+    for(int i=0;i<n;i++){
+        dis[i]=inf;
+        vis[i]=0;
+        parU[i]=-1;
     }
+    
+    // pii->{node,dis_from_src}
+    priority_queue<pii,vector<pii>,priortize>pq;
+    fl(i,0,k){
+        dis[val[i].ff]=val[i].ss;
+        pq.push(mp(val[i].ff,dis[val[i].ff]));    
+    }
+    while(!pq.empty()){
+        pii fr=pq.top();
+        pq.pop();
+        // If once that node is relaxed then we will not take that not again.
+        if(vis[fr.ff]){
+            C;
+        }
+        // Else we will process
+        vis[fr.ff]=1;
+        for(auto v:gr[fr.ff]){
+            int neig=v.ff;
+            int wt=v.ss;
+            if(dis[neig]>dis[fr.ff]+wt){
+                dis[neig]=dis[fr.ff]+wt;
+                pq.push(mp(neig,dis[neig]));
+                parU[neig]=fr.ff;
+            }
+        }
+    }
+    // parU will tell us the path.
 }
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    /*
-        Wrong approach : See sample test case 1:
-                        Greedily sort krdenge beauty and lenght wise.
-                        It will be sorted on the basis of beauty, less the beauty lesser will be the position.🥺🥺
-
-        
-        
-
-    */
-    e1(n);
-    av(l,n);
-    av(b,n);
-    vector<pii> a(n);
-    fl(i,0,n){
-        a[i]={l[i],b[i]};
-    }
-    sort(all(a),cmp);
-    // pr(a);
-    int sum=0;
-    int len=0;
+    // Reseting the graph
+    cin>>n>>m>>k;
     for(int i=0;i<n;i++){
-        sum+=(len*a[i].ss);
-        len+=a[i].ff;
+        gr[i].resize(0);
+        gr[i].clear();
     }
-    cout<<sum<<endl;
-    
+    val.resize(0);
+    val.clear();
+    val.resize(k);
+    fl(i,0,k){
+        e2(x,y);x--;
+        val[i]={x,y};
+    }
+    fl(i,0,m){
+        e2(x,y);x--;y--;e1(wt);
+        gr[x].pb({y,wt});gr[y].pb({x,wt});
+    }
+    dijikstra();
+    fl(i,0,n){
+        cout<<dis[i]<<" ";
+    }    
+    cout<<endl;
 
 
 

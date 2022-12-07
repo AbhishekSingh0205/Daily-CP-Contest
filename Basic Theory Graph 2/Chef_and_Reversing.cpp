@@ -71,46 +71,14 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-bool cmp(pii a,pii b){
-    // (l,val)
-    // Case 1 : Given is correct position.
-    if(a.ff*b.ss>b.ff*a.ss){
-        return true;
-    }
-    else{
-        return false;
-    }
-}
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
+
     /*
-        Wrong approach : See sample test case 1:
-                        Greedily sort krdenge beauty and lenght wise.
-                        It will be sorted on the basis of beauty, less the beauty lesser will be the position.🥺🥺
-
-        
-        
-
+        Simply 0-1 BFS
     */
-    e1(n);
-    av(l,n);
-    av(b,n);
-    vector<pii> a(n);
-    fl(i,0,n){
-        a[i]={l[i],b[i]};
-    }
-    sort(all(a),cmp);
-    // pr(a);
-    int sum=0;
-    int len=0;
-    for(int i=0;i<n;i++){
-        sum+=(len*a[i].ss);
-        len+=a[i].ff;
-    }
-    cout<<sum<<endl;
-    
-
+    // Simply 01 BFS 
 
 
 
