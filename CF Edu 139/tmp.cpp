@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
-#include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
-using namespace __gnu_pbds;
+// #include <ext/pb_ds/assoc_container.hpp>
+// #include <ext/pb_ds/tree_policy.hpp>
+// using namespace __gnu_pbds;
   
-#define pbds tree<pii, null_type,less<pii>, rb_tree_tag,tree_order_statistics_node_update>
+// #define pbds tree<int, null_type,less<int>, rb_tree_tag,tree_order_statistics_node_update>
 
 using namespace std;
 
@@ -54,82 +54,54 @@ const int MIN = numeric_limits<int>::min();
 const int N = 0;
 //mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
-class seg_tree{
-private:
-	typedef struct node{
-		pbds p;
-	}node;
+int sz, n;
+vector<multiset<int>> tree;
 
-	int sz;
-	node nd;
-	vector<node> tr;
+void build(vi& v){
+    sz = n;
+    while(ppc(sz) != 1)    sz++;
+    tree.clear();
+    tree.resize(2*sz - 1);
+    rep(i, 0, n)	tree[i + sz - 1].insert(v[i]);
+    irep(i, sz - 2, -1){
+    	for(auto a : tree[2*i + 1])	tree[i].insert(a);
+    	for(auto a : tree[2*i + 2])	tree[i].insert(a);
+    }
+}
 
-public:
-	void build(int n){
-		sz = n;
-	    while(ppc(sz) != 1)    sz++;
-	    tr.assign(2*sz - 1, nd);
-	}
+int query(int l, int r, int i, int low, int high, int val){
+   	if(i > sz - 2){
+   		if(tree[i].lower_bound(val) == tree[i].end())	return -1;
+		return i - (sz - 1);
+   	}
+    else{
+    	if(l <= (low + high) / 2 && tree[2*i + 1].lower_bound(val) != tree[2*i + 1].end())	return query(l, r, 2*i + 1, low, (low + high) / 2, val);
+    	else if(r > (low + high) / 2 && tree[2*i + 2].lower_bound(val) != tree[2*i + 2].end())	return query(l, r, 2*i + 2, (low + high) / 2 + 1, high, val);
+    	else	return -1;
+    }
+}
 
-	int query(int l, int r, int x, int i = 0, int low = 0, int high = 1e9){
-		high = min(high, sz - 1);
-	    if(l > high || r < low || l > r)    return 0;
-	    else if(l <= low && high <= r)	return tr[i].p.order_of_key({x + 1, -1});
-	    return query(l, r, x, 2*i + 1, low, (low + high) / 2) + query(l, r, x, 2*i + 2, (low + high) / 2 + 1, high);
-	}
-
-	void upd(int pos, int val, int rem){
-		int i = sz - 1 + pos;
-		tr[i].p.clear(); tr[i].p.insert({val, 0});
-		while(sz != 1){
-			i = (i - 1) / 2;
-			if(rem != -1){
-				auto it = tr[i].p.upper_bound({rem + 1, -1}); it--; tr[i].p.erase(it);
-			}
-			auto it = tr[i].p.upper_bound({val + 1, -1});
-			if(it == tr[i].p.begin())	tr[i].p.insert({val, 0});
-			else{
-				it--;
-				if(it->fr == val)	tr[i].p.insert({val, it->sc + 1});
-				else	tr[i].p.insert({val, 0});
-			}
-			if(i == 0)	break;
-		}
-	}
-
-	void erase(int l, int r, int x, vi& v, int i = 0, int low = 0, int high = 1e9){
-		high = min(high, sz - 1);
-	    if(l > high || r < low || l > r)    return;
-	 	while(sz(tr[i].p) && tr[i].p.begin()->fr <= x)	tr[i].p.erase(tr[i].p.begin());
-	 	if(tr[i].p.begin()->fr<=x && i > sz - 2){
-	 		v[i - (sz - 1)] = -1;
-	 		return;
-	 	}
-	    erase(l, r, x, v, 2*i + 1, low, (low + high) / 2); erase(l, r, x, v, 2*i + 2, (low + high) / 2 + 1, high);
-	}
-};
+void upd(int pos, int rem, int ins){
+	int i = sz - 1 + pos;
+	do{
+		tree[i].erase(tree[i].find(rem));
+		tree[i].insert(ins);
+		if(i == 0)	break;
+		i = (i - 1) / 2;
+	}while(n != 1);
+}
 
 void solve(){
-	int n, q; cin >> n >> q;
-	seg_tree st;
-	st.build(n);
-	vi v(n, -1);
+	int q; cin >> n >> q;
+	vi v(n); cin >> v;
+	build(v);
 	while(q--){
-		int t, i, j; cin >> t >> i >> j;
+		int t, a, b; cin >> t >> a >> b;
 		if(t == 1){
-			st.upd(i, j, v[i]);
-			v[i] = j;
-            // cerr<<"IN UPD";
-            // cerr<<v<<endl;
+			upd(a, v[a], b);
+			v[a] = b;
 		}
-		else{
-			int x; cin >> x;
-			cout << st.query(i, j, x); nl;
-			st.erase(i, j, x, v);
-            // cerr<<"Q";
-			
-		}
-        cout << v; nl;
+		else	cout << query(b, n - 1, 0, 0, sz - 1, a) << endl;
 	}
 }
 
