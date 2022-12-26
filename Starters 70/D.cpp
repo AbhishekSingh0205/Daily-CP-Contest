@@ -49,7 +49,7 @@ template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order
 #define NS cout<<"No"<<"\n"
 #define lcm(a,b) (a/__gcd(a,b))*b
 #define pa(a) for(auto e:a)cout<<e<<" "
-const int N = 1e5 + 5;
+const int N = 3e5 + 5;
 int dx[4] = { -1, 1, 0, 0};
 int dy[4] = {0, 0, -1, 1};
 int kx[8] = { -1, 1, 0, 0, -1, -1, 1, 1};
@@ -71,68 +71,79 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-vector<pii>gr[N];
-bool is;
-set<int>st;
-void dfsa(int src,int par,int val,int a,int b){
-    if(val!=0 && src==b){
-        return;
-    }
-    if(src!=a){
-        st.insert(val);
-    }
+vi gr[N];
+int par[N];
+void root(int src,int pare){
+    par[src]=pare;
     for(auto v:gr[src]){
-        if(v.ff!=par){
-            dfsa(v.ff,src,val^v.ss,a,b);
-        }
-    }
-    
-}
-void dfsb(int src,int par,int val,int b){
-    if(src!=b){
-        if((st.find(val)!=st.end())||val==0){
-            is=1;
-            return;
-        }
-    }
-    for(auto v:gr[src]){
-        if(v.ff!=par){
-            dfsb(v.ff,src,val^v.ss,b);
-            if(is){
-                return;
-            }
+        if(v!=pare){
+            root(v,src);
         }
     }
 }
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    is=0;
-    st.clear();
-    e3(n,a,b);a--;b--;
-    for(int i=0;i<n;i++){
+    e1(n);
+    fl(i,0,n){
         gr[i].resize(0);
         gr[i].clear();
-        // pare[i]=i;/
+        par[i]=-1;
     }
-    st.clear();
-    fl(i,0,n-1){
-        e3(x,y,w);
-        x--;y--;
-        gr[x].pb(mp(y,w));
-        gr[y].pb(mp(x,w));
-    }   
-    is=0;
-    dfsa(a,-1,0,a,b);
-    dfsb(b,-1,0,b);
-    if(is){
-        cout<<"YES";
+    for(int i=0;i<n-1;i++){
+        e2(x,y);x--;y--;
+        gr[x].pb(y);
+        gr[y].pb(x);
     }
-    else{
-        cout<<"NO";
+    int leaf[n];memset(leaf,0,sizeof leaf);
+    root(0,-1);
+    for(int i=0;i<n;i++){
+        if(gr[i].size()==1 && i!=0){
+            leaf[i]=1;
+        }
     }
-    cout<<endl;
-
+    int val[n];memset(val,0,sizeof val);
+    int cnt1=0;
+    int done[n];memset(done,0,sizeof done);
+    e1(q);
+    fl(i,0,q){
+        e1(x);
+        if(x==1){
+            e1(y);y--;
+            if(done[y]){
+             	C;
+            }
+            else if(done[y]==0 && leaf[y]==1){
+                val[y]++;
+                done[y]=1;
+                int p=par[y];
+                val[p]++;
+                cnt1++;
+            }
+            else if(leaf[y]==0 && done[y]==0){
+                if(y==0){
+                    if(val[0]==gr[0].size()){
+                        done[y]=1;
+                        cnt1++;
+                    }
+                }
+                else{
+                    if(val[y]==gr[y].size()-1){
+                        done[y]=1;
+                        cnt1++;
+                        val[par[y]]++;
+                    }
+                }
+            }
+        }else{
+            if(done[0]==1){
+                cout<<n-1<<endl;
+            }
+            else{
+                cout<<n-1-cnt1<<endl;
+            }
+        }
+    }
 
 }
 int32_t main()

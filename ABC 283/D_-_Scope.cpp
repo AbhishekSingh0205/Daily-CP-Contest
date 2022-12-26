@@ -71,67 +71,86 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-vector<pii>gr[N];
-bool is;
-set<int>st;
-void dfsa(int src,int par,int val,int a,int b){
-    if(val!=0 && src==b){
-        return;
-    }
-    if(src!=a){
-        st.insert(val);
-    }
-    for(auto v:gr[src]){
-        if(v.ff!=par){
-            dfsa(v.ff,src,val^v.ss,a,b);
-        }
-    }
-    
-}
-void dfsb(int src,int par,int val,int b){
-    if(src!=b){
-        if((st.find(val)!=st.end())||val==0){
-            is=1;
-            return;
-        }
-    }
-    for(auto v:gr[src]){
-        if(v.ff!=par){
-            dfsb(v.ff,src,val^v.ss,b);
-            if(is){
-                return;
-            }
-        }
-    }
-}
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    is=0;
-    st.clear();
-    e3(n,a,b);a--;b--;
+    es(s);
+    int n=s.size();
+    pii pos[n]; 
+    fl(i,0,n){
+        pos[i].ff=0;
+        pos[i].ss=0;
+        if(s[i]=='('){
+            pos[i].ff++;
+        }
+        else if(s[i]==')'){
+            pos[i].ss++;
+        }
+        if(i){
+            pos[i].ff+=pos[i-1].ff;
+            pos[i].ss+=pos[i-1].ss;
+        }
+        
+    }
+    set<char>st;
+    int pref[n][26];memset(pref,0,sizeof pref);
     for(int i=0;i<n;i++){
-        gr[i].resize(0);
-        gr[i].clear();
-        // pare[i]=i;/
+        if((s[i]!='(') && (s[i]!=')')){
+            pref[i][s[i]-'a']++;
+        }
+        if(i){
+            fl(j,0,26){
+                pref[i][j]+=pref[i-1][j];
+            }
+        }
     }
-    st.clear();
-    fl(i,0,n-1){
-        e3(x,y,w);
-        x--;y--;
-        gr[x].pb(mp(y,w));
-        gr[y].pb(mp(x,w));
-    }   
-    is=0;
-    dfsa(a,-1,0,a,b);
-    dfsb(b,-1,0,b);
-    if(is){
-        cout<<"YES";
+    fl(i,0,n){
+        if(s[i]=='('){
+            C;
+        }
+        else if(s[i]==')'){
+            int low=0,high=i-1;
+            int ans=high;
+            pr(i);
+            while(low<=high){
+                int mid=(low+high)/2;
+                int open=pos[i].ff-pos[mid].ff+(s[mid]=='(');
+                int clos=pos[i].ss-pos[mid].ss+(s[mid]==')');
+                if(open>=clos){
+                    ans=mid;
+                    low=mid+1;
+                }
+                else{
+                    high=mid-1;
+                }
+            }
+            int diff[26];
+            // pr(i,ans,s);
+            // pr(st);
+            memset(diff,0,sizeof diff);
+            fl(j,0,26){
+                diff[j]=pref[i][j]-pref[ans][j];
+            }
+            // pr("Gone");
+            // pra(diff,26);
+            fl(j,0,26){
+                if(diff[j] && st.find(char(j+'a'))!=st.end()){
+                    st.erase(char(j+'a'));
+                }
+            }
+            // pr("End");
+        }
+        else{
+            if(st.find(s[i])!=st.end()){
+                cout<<"No"<<endl;R;
+            }
+            st.insert(s[i]);
+        }
     }
-    else{
-        cout<<"NO";
-    }
-    cout<<endl;
+    cout<<"Yes"<<endl;
+
+
+
 
 
 }
@@ -139,7 +158,7 @@ int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    cin >> t;
+    // cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

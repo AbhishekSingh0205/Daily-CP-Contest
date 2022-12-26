@@ -71,67 +71,48 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-vector<pii>gr[N];
-bool is;
-set<int>st;
-void dfsa(int src,int par,int val,int a,int b){
-    if(val!=0 && src==b){
-        return;
-    }
-    if(src!=a){
-        st.insert(val);
-    }
-    for(auto v:gr[src]){
-        if(v.ff!=par){
-            dfsa(v.ff,src,val^v.ss,a,b);
-        }
-    }
-    
-}
-void dfsb(int src,int par,int val,int b){
-    if(src!=b){
-        if((st.find(val)!=st.end())||val==0){
-            is=1;
-            return;
-        }
-    }
-    for(auto v:gr[src]){
-        if(v.ff!=par){
-            dfsb(v.ff,src,val^v.ss,b);
-            if(is){
-                return;
-            }
-        }
-    }
-}
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    is=0;
-    st.clear();
-    e3(n,a,b);a--;b--;
+    e1(n);av(a,n);
+    mii m;
+    fl(i,0,n){
+        m[a[i]]++;
+    }
+    for(auto v:m){
+        if(v.ss%v.ff){
+            cout<<-1<<endl;R;
+        }
+    }
+    vi res(n);
+    map<int,int>val;
+    map<int,int>g;
+    int cnt=0;
     for(int i=0;i<n;i++){
-        gr[i].resize(0);
-        gr[i].clear();
-        // pare[i]=i;/
+        if(val[a[i]]){
+            res[i]=g[a[i]];
+            val[a[i]]--;
+            if(val[a[i]]==0){
+                g.erase(a[i]);
+            }
+        }
+        else{
+            cnt++;
+            val[a[i]]=a[i];
+            g[a[i]]=cnt;
+            res[i]=g[a[i]];
+            val[a[i]]--;
+            if(val[a[i]]==0){
+                g.erase(a[i]);
+            }
+        }
     }
-    st.clear();
-    fl(i,0,n-1){
-        e3(x,y,w);
-        x--;y--;
-        gr[x].pb(mp(y,w));
-        gr[y].pb(mp(x,w));
-    }   
-    is=0;
-    dfsa(a,-1,0,a,b);
-    dfsb(b,-1,0,b);
-    if(is){
-        cout<<"YES";
-    }
-    else{
-        cout<<"NO";
+    for(int i=0;i<n;i++){
+        cout<<res[i]<<" ";
     }
     cout<<endl;
+
+
 
 
 }

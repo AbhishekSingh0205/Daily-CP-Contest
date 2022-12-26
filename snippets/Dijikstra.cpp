@@ -21,7 +21,7 @@ void dijikstra(int src){
     pq.push(mp(src,0));
     while(!pq.empty()){
         pii fr=pq.top();
-        pr.pop();
+        pq.pop();
         // If once that node is relaxed then we will not take that not again.
         if(vis[fs.ff]){
             C;

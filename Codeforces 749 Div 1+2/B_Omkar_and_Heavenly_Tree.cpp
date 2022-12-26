@@ -71,69 +71,69 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-vector<pii>gr[N];
-bool is;
-set<int>st;
-void dfsa(int src,int par,int val,int a,int b){
-    if(val!=0 && src==b){
-        return;
-    }
-    if(src!=a){
-        st.insert(val);
-    }
-    for(auto v:gr[src]){
-        if(v.ff!=par){
-            dfsa(v.ff,src,val^v.ss,a,b);
-        }
-    }
-    
+int parent[N];
+int rnk[N];
+int find_set(int v) {
+    if (v == parent[v])
+        return v;
+    return parent[v] = find_set(parent[v]);
 }
-void dfsb(int src,int par,int val,int b){
-    if(src!=b){
-        if((st.find(val)!=st.end())||val==0){
-            is=1;
-            return;
-        }
-    }
-    for(auto v:gr[src]){
-        if(v.ff!=par){
-            dfsb(v.ff,src,val^v.ss,b);
-            if(is){
-                return;
-            }
-        }
+
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a != b) {
+        if (rnk[a] < rnk[b])
+            swap(a, b);
+        parent[b] = a;
+        rnk[a]+=rnk[b];
     }
 }
+
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    is=0;
-    st.clear();
-    e3(n,a,b);a--;b--;
+    e2(n,m);
+    fl(i,0,n){
+        rnk[i]=1;
+        parent[i]=i;
+    }
+    vector<pair<int,int>>res;
+    int don[n];memset(don,0,sizeof don);
+    int dp[m][3];
+    fl(i,0,m){
+        e3(a,b,c);a--;b--;c--;
+        don[b]=1;
+        dp[i][0]=a;
+        dp[i][1]=b;
+        dp[i][2]=c;
+    }
+    fl(i,0,m){
+        if(don[dp[i][0]]==0 && don[dp[i][2]]==0){
+            if(find_set(dp[i][0])!=find_set(dp[i][2])){
+                res.pb({dp[i][0],dp[i][2]});
+                union_sets(dp[i][0],dp[i][2]);
+            }
+        }
+    }
+    fl(i,0,m){
+        
+            if(find_set(dp[i][0])!=find_set(dp[i][2])){
+                res.pb({dp[i][0],dp[i][2]});
+                union_sets(dp[i][0],dp[i][2]);
+            }
+        
+    }
+    
     for(int i=0;i<n;i++){
-        gr[i].resize(0);
-        gr[i].clear();
-        // pare[i]=i;/
+        if(find_set(i)!=find_set(0)){
+            union_sets(i,0);
+            res.pb({i,0});
+        }
     }
-    st.clear();
-    fl(i,0,n-1){
-        e3(x,y,w);
-        x--;y--;
-        gr[x].pb(mp(y,w));
-        gr[y].pb(mp(x,w));
-    }   
-    is=0;
-    dfsa(a,-1,0,a,b);
-    dfsb(b,-1,0,b);
-    if(is){
-        cout<<"YES";
+    for(auto v:res){
+        cout<<v.ff+1<<" "<<v.ss+1<<endl;
     }
-    else{
-        cout<<"NO";
-    }
-    cout<<endl;
-
-
 }
 int32_t main()
 {

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Problem Link Tagger</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <h1>Problem Link Tagger</h1>
+    <form id="tag-form">
+      <label for="tag-input">Create a new tag:</label><br />
+      <input type="text" id="tag-input" placeholder="Enter tag name" />
+      <button type="submit">Create</button>
+    </form>
+    <div id="tags">
+      <!-- Tag cards will be added here -->
+    </div>
+    <hr />
+    <h2>Add a Problem Link</h2>
+    <form id="link-form">
+      <label for="link-input">Link:</label><br />
+      <input type="text" id="link-input" placeholder="Enter problem link" />
+      <br />
+      <label for="tags-input">Tags:</label><br />
+      <input
+        type="text"
+        id="tags-input"
+        placeholder="Enter comma-separated list of tags"
+      />
+      <button type="submit">Add</button>
+    </form>
+    <div id="links">
+      <!-- Problem link cards will be added here -->
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

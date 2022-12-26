@@ -71,67 +71,105 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-vector<pii>gr[N];
-bool is;
-set<int>st;
-void dfsa(int src,int par,int val,int a,int b){
-    if(val!=0 && src==b){
-        return;
+int dp[N][3][3];
+int typ[N];
+int n,m;
+int rec(int i,int j,int k){
+    // pr(i,j,k);
+    if(i==n){
+        // pr("Ended");
+        return 0;
     }
-    if(src!=a){
-        st.insert(val);
+    if(dp[i][j][k]!=-1){
+        return dp[i][j][k];
     }
-    for(auto v:gr[src]){
-        if(v.ff!=par){
-            dfsa(v.ff,src,val^v.ss,a,b);
+    int ans=0;
+    int na=j,nb=k;
+    if(na==1 && nb==2){
+        na=0;nb=1;
+    }
+    if(na==2 && nb==1){
+        na=1;nb=0;
+    }
+    if(na==nb){
+        na=0;
+        nb=0;
+    }
+    if(typ[i]==0){
+        // pr("Going 1");
+        if(na==2){
+            ans=rec(i+1,na,nb+1);
+        }
+        else if(nb==2){
+            ans=rec(i+1,na+1,nb);
+        }
+        else{
+            ans=max(rec(i+1,na+1,nb),rec(i+1,na,nb+1));
         }
     }
-    
-}
-void dfsb(int src,int par,int val,int b){
-    if(src!=b){
-        if((st.find(val)!=st.end())||val==0){
-            is=1;
-            return;
+    else if(typ[i]==1){
+        // na=2, nb=0
+        // pr("Going ./2");
+        if(na==2 && nb==0){
+            // pr("1",na,nb);
+            ans=1+rec(i+1,na,nb+1);
+        }
+        // na=1, nb=0
+        if(na==1 && nb==0){
+            // pr("2",na,nb);
+            ans=max(rec(i+1,0,0),1+rec(i+1,na+1,nb));
+        }
+        // na = nb
+        if(na==nb){
+            // pr("3",i,na,nb);
+            ans=max(rec(i+1,0,0),1+rec(i+1,na+1,nb));
+        }
+        // na=0, nb=1
+        if(na<nb){
+            // pr("4",na,n/b);
+            ans=rec(i+1,0,0);
         }
     }
-    for(auto v:gr[src]){
-        if(v.ff!=par){
-            dfsb(v.ff,src,val^v.ss,b);
-            if(is){
-                return;
-            }
+    else if(typ[i]==2){
+        // pr("Going 3");
+        if(na>nb){
+            ans=rec(i+1,0,0);
+        }
+        if(nb==2 && na==0){
+            ans=1+rec(i+1,na+1,nb);
+        }
+        if(nb==1 && na==0){
+            ans=max(rec(i+1,0,0),1+rec(i+1,na,nb+1));
+        }
+        if(na==nb){
+            ans=max(rec(i+1,0,0),1+rec(i+1,na,nb+1));
         }
     }
+    return dp[i][j][k]=ans;
 }
 void solve()
 {
-    /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    is=0;
-    st.clear();
-    e3(n,a,b);a--;b--;
-    for(int i=0;i<n;i++){
-        gr[i].resize(0);
-        gr[i].clear();
-        // pare[i]=i;/
+    /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next typ buddy.*/
+    cin>>n>>m;
+    av(a,m);
+    av(c,m);
+    fl(i,0,n+1){
+        typ[i]=0;
+        fl(j,0,3){
+            fl(k,0,3){
+                dp[i][j][k]=-1;
+            }
+        }
     }
-    st.clear();
-    fl(i,0,n-1){
-        e3(x,y,w);
-        x--;y--;
-        gr[x].pb(mp(y,w));
-        gr[y].pb(mp(x,w));
-    }   
-    is=0;
-    dfsa(a,-1,0,a,b);
-    dfsb(b,-1,0,b);
-    if(is){
-        cout<<"YES";
+
+    fl(i,0,m){
+        typ[a[i]-1]=c[i];
     }
-    else{
-        cout<<"NO";
-    }
-    cout<<endl;
+    // pra(typ,n);
+    cout<<rec(0,0,0)<<endl;        
+
+
+
 
 
 }

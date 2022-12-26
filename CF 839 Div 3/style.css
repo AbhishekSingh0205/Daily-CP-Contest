@@ -1,0 +1,40 @@
+body {
+    font-family: sans-serif;
+}
+
+#tags {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tag-card {
+    background-color: lightgray;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    width: 200px;
+}
+
+#links {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.link-card {
+    background-color: lightblue;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    width: 300px;
+}
+
+.link-tags {
+    margin-top: 10px;
+}
+
+.link-tag {
+    background-color: lightgray;
+    border-radius: 5px;
+    margin-right: 10px;
+    padding: 5px;
+}

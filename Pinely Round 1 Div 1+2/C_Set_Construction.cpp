@@ -71,67 +71,56 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-vector<pii>gr[N];
-bool is;
-set<int>st;
-void dfsa(int src,int par,int val,int a,int b){
-    if(val!=0 && src==b){
-        return;
-    }
-    if(src!=a){
-        st.insert(val);
-    }
-    for(auto v:gr[src]){
-        if(v.ff!=par){
-            dfsa(v.ff,src,val^v.ss,a,b);
-        }
-    }
-    
-}
-void dfsb(int src,int par,int val,int b){
-    if(src!=b){
-        if((st.find(val)!=st.end())||val==0){
-            is=1;
-            return;
-        }
-    }
-    for(auto v:gr[src]){
-        if(v.ff!=par){
-            dfsb(v.ff,src,val^v.ss,b);
-            if(is){
-                return;
-            }
-        }
-    }
-}
+set<int>st[N];
+vi gr[N];
+int indg[N];
+// void dfs(int src,int par,int cnt){
+//     for(auto v:gr[src]){
+//         if(v!=par){
+//             pr(v);
+//             st[v].insert(cnt);
+//             st[v].insert(cnt+1);
+//             pr(st[v]);
+//             dfs(v,src,cnt+1);
+//         }
+//     }
+// }
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    is=0;
-    st.clear();
-    e3(n,a,b);a--;b--;
+    e1(n);
+    string a[n];
+    fl(i,0,n){
+        st[i].clear();
+    }
+    fl(i,0,n){
+        cin>>a[i];
+    }
     for(int i=0;i<n;i++){
-        gr[i].resize(0);
-        gr[i].clear();
-        // pare[i]=i;/
+        st[i].insert(i+1);
     }
-    st.clear();
-    fl(i,0,n-1){
-        e3(x,y,w);
-        x--;y--;
-        gr[x].pb(mp(y,w));
-        gr[y].pb(mp(x,w));
-    }   
-    is=0;
-    dfsa(a,-1,0,a,b);
-    dfsb(b,-1,0,b);
-    if(is){
-        cout<<"YES";
+    fl(i,0,n){
+        fl(j,0,n){
+            if(a[i][j]=='1'){
+                st[i].insert(i+1);
+                st[j].insert(i+1);
+                st[j].insert(j+1);
+                for(auto v:st[i]){
+                    st[j].insert(v);
+                }
+            }
+        }
     }
-    else{
-        cout<<"NO";
+    for(int i=0;i<n;i++){
+        cout<<st[i].size()<<" ";
+        for(auto v:st[i]){
+            cout<<v<<" ";
+        }
+        cout<<endl;
     }
-    cout<<endl;
+
+
+
 
 
 }
