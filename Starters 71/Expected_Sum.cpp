@@ -22,7 +22,7 @@ template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order
 #define rz resize
 #define vvi vector<vector<int>>
 #define sz(s) s.size()
-#define mod 1000000007
+#define mod 998244353
 #define ff first
 #define ss second
 #define inf 10e15
@@ -71,67 +71,72 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-vi a;
-struct NODE{
-    // Can be modified according to the question.
-    int ans;
-    // Setting the value for default value.
-    NODE():ans(0){}
-};
-NODE segTree[4*N];
-NODE combine(NODE a,NODE b){
-    // Can be modified according to the question.
-    NODE c;
-    c.ans=a.ans+b.ans;
-    return c;
+long long binpow(long long a, long long b, long long m) {
+    a %= m;
+    long long res = 1;
+    while (b > 0) {
+        if (b & 1)
+            res = res * a % m;
+        a = a * a % m;
+        b >>= 1;
+    }
+    return res;
 }
-void build(int node,int start,int end){
-    if(start==end){
-        // Can be changed according to the question
-        segTree[node].ans=a[start];
-        return;
-    }
-    int mid=(start+end)/2;
-    build(2*node,start,mid);
-    build(2*node+1,mid+1,end);
-    segTree[node]=combine(segTree[2*node],segTree[2*node+1]);
+
+int gcdExtended(int a, int b, int* x, int* y);
+
+// Function to find modulo inverse of a
+int modInverse(int A, int M)
+{
+	int x, y;
+	int g = gcdExtended(A, M, &x, &y);
+	
+
+		// m is added to handle negative x
+		int res = (x % M + M) % M;
+        return res;
+		
+	
 }
-// Single Value update -> update1
-void update1(int node,int start,int end,int ind,int val){
-    if(start==end){
-        // Can be changed according to the question
-        segTree[node].ans=val;
-        return;
-    }
-    int mid=(start+end)/2;
-    if(ind>mid){
-        update1(2*node+1,mid+1,end,ind,val);
-    }
-    else{
-        update1(2*node,start,mid,ind,val);
-    }
-    segTree[node]=combine(segTree[2*node],segTree[2*node+1]);
+
+// Function for extended Euclidean Algorithm
+int gcdExtended(int a, int b, int* x, int* y)
+{
+
+	// Base Case
+	if (a == 0) {
+		*x = 0, *y = 1;
+		return b;
+	}
+
+	// To store results of recursive call
+	int x1, y1;
+	int gcd = gcdExtended(b % a, a, &x1, &y1);
+
+	// Update x and y using results of recursive
+	// call
+	*x = y1 - (b / a) * x1;
+	*y = x1;
+
+	return gcd;
 }
-// query without lazy propagation.
-NODE query(int node,int start,int end,int l,int r){
-    // First case out of bound, means (l,r) range is not in (start,end)
-    if(start>r||end<l){
-        return NODE();
-    }
-    // If (l,r) is inside (start,end)
-    if(start>=l && end<=r){
-        return segTree[node];
-    }
-    int mid=(start+end)/2;
-    NODE lq=query(2*node,start,mid,l,r);
-    NODE rq=query(2*node+1,mid+1,end,l,r);
-    return combine(lq,rq);
-}
+
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    e1(n);
-    av(a,n/2);
+    e2(a,b);
+    int n=a+b;
+    int sum=(a+b);
+    int res=(n+1)/2;
+    res*=modInverse(n,mod);
+    res%=mod;
+    res+=mod;
+    res%=mod;
+    a*=res;
+    
+    cout<<((a%mod)+mod)%mod<<endl;
+
+
 
 }
 int32_t main()

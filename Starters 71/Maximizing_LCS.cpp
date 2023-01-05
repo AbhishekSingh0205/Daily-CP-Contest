@@ -71,67 +71,45 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-vi a;
-struct NODE{
-    // Can be modified according to the question.
-    int ans;
-    // Setting the value for default value.
-    NODE():ans(0){}
-};
-NODE segTree[4*N];
-NODE combine(NODE a,NODE b){
-    // Can be modified according to the question.
-    NODE c;
-    c.ans=a.ans+b.ans;
-    return c;
-}
-void build(int node,int start,int end){
-    if(start==end){
-        // Can be changed according to the question
-        segTree[node].ans=a[start];
-        return;
+int dp[5001][5001];
+ 
+// Returns the length of the longest palindromic subsequence
+// in seq
+int lps(string& s1, string& s2, int n1, int n2)
+{
+    if (n1 == 0 || n2 == 0) {
+        return 0;
     }
-    int mid=(start+end)/2;
-    build(2*node,start,mid);
-    build(2*node+1,mid+1,end);
-    segTree[node]=combine(segTree[2*node],segTree[2*node+1]);
-}
-// Single Value update -> update1
-void update1(int node,int start,int end,int ind,int val){
-    if(start==end){
-        // Can be changed according to the question
-        segTree[node].ans=val;
-        return;
+    if (dp[n1][n2] != -1) {
+        return dp[n1][n2];
     }
-    int mid=(start+end)/2;
-    if(ind>mid){
-        update1(2*node+1,mid+1,end,ind,val);
+    if (s1[n1 - 1] == s2[n2 - 1]) {
+        return dp[n1][n2] = 1 + lps(s1, s2, n1 - 1, n2 - 1);
     }
-    else{
-        update1(2*node,start,mid,ind,val);
+    else {
+        return dp[n1][n2] = max(lps(s1, s2, n1 - 1, n2),
+                                lps(s1, s2, n1, n2 - 1));
     }
-    segTree[node]=combine(segTree[2*node],segTree[2*node+1]);
-}
-// query without lazy propagation.
-NODE query(int node,int start,int end,int l,int r){
-    // First case out of bound, means (l,r) range is not in (start,end)
-    if(start>r||end<l){
-        return NODE();
-    }
-    // If (l,r) is inside (start,end)
-    if(start>=l && end<=r){
-        return segTree[node];
-    }
-    int mid=(start+end)/2;
-    NODE lq=query(2*node,start,mid,l,r);
-    NODE rq=query(2*node+1,mid+1,end,l,r);
-    return combine(lq,rq);
 }
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
     e1(n);
-    av(a,n/2);
+    es(s);
+    for(int i=0;i<=n;i++){
+        for(int j=0;j<=n;j++){
+            dp[i][j]=-1;
+        }
+    }
+    string g=s;
+    reverse(all(g));
+    int res=lps(s,g,n,n);
+    cout<<res/2<<endl;
+    
+
+
+
+
 
 }
 int32_t main()

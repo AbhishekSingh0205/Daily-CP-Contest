@@ -22,7 +22,7 @@ template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order
 #define rz resize
 #define vvi vector<vector<int>>
 #define sz(s) s.size()
-#define mod 1000000007
+#define mod 2
 #define ff first
 #define ss second
 #define inf 10e15
@@ -71,67 +71,60 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-vi a;
-struct NODE{
-    // Can be modified according to the question.
-    int ans;
-    // Setting the value for default value.
-    NODE():ans(0){}
+// Overloading for mod
+
+struct mint
+{
+    int val;
+    mint(int _val = 0)
+    {
+        val = _val % mod;
+    }
+    mint operator+(mint oth)
+    {
+        return val + oth.val;
+    }
+    mint operator*(mint oth)
+    {
+        return 1LL * val * oth.val;
+    }
+    mint operator-(mint oth)
+    {
+        return val - oth.val + mod;
+    }
+    void operator+=(mint oth)
+    {
+        val = (mint(val) + oth).val;
+    }
+    void operator-=(mint oth)
+    {
+        val = (mint(val) - oth).val;
+    }
+    void operator*=(mint oth)
+    {
+        val = (mint(val) * oth).val;
+    }
 };
-NODE segTree[4*N];
-NODE combine(NODE a,NODE b){
-    // Can be modified according to the question.
-    NODE c;
-    c.ans=a.ans+b.ans;
-    return c;
-}
-void build(int node,int start,int end){
-    if(start==end){
-        // Can be changed according to the question
-        segTree[node].ans=a[start];
-        return;
-    }
-    int mid=(start+end)/2;
-    build(2*node,start,mid);
-    build(2*node+1,mid+1,end);
-    segTree[node]=combine(segTree[2*node],segTree[2*node+1]);
-}
-// Single Value update -> update1
-void update1(int node,int start,int end,int ind,int val){
-    if(start==end){
-        // Can be changed according to the question
-        segTree[node].ans=val;
-        return;
-    }
-    int mid=(start+end)/2;
-    if(ind>mid){
-        update1(2*node+1,mid+1,end,ind,val);
-    }
-    else{
-        update1(2*node,start,mid,ind,val);
-    }
-    segTree[node]=combine(segTree[2*node],segTree[2*node+1]);
-}
-// query without lazy propagation.
-NODE query(int node,int start,int end,int l,int r){
-    // First case out of bound, means (l,r) range is not in (start,end)
-    if(start>r||end<l){
-        return NODE();
-    }
-    // If (l,r) is inside (start,end)
-    if(start>=l && end<=r){
-        return segTree[node];
-    }
-    int mid=(start+end)/2;
-    NODE lq=query(2*node,start,mid,l,r);
-    NODE rq=query(2*node+1,mid+1,end,l,r);
-    return combine(lq,rq);
-}
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    e1(n);
-    av(a,n/2);
+    e1(n);es(s);
+    int cntL=0;
+    if(s[0]=='L')cntL++;
+    int id=-1;
+    fl(i,1,n){
+        if(s[i]=='L' && s[i-1]=='R'){
+            cout<<0<<endl;R;
+        }
+        if(s[i]=='R' && s[i-1]=='L'){
+            id=i;
+        }
+        if(s[i]=='L')cntL++;
+    }
+    if(id==-1){
+        cout<<-1<<endl;R;
+    }
+    cout<<id<<endl;R;
 
 }
 int32_t main()

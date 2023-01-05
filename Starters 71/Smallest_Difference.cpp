@@ -71,67 +71,92 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
-vi a;
-struct NODE{
-    // Can be modified according to the question.
-    int ans;
-    // Setting the value for default value.
-    NODE():ans(0){}
-};
-NODE segTree[4*N];
-NODE combine(NODE a,NODE b){
-    // Can be modified according to the question.
-    NODE c;
-    c.ans=a.ans+b.ans;
-    return c;
-}
-void build(int node,int start,int end){
-    if(start==end){
-        // Can be changed according to the question
-        segTree[node].ans=a[start];
-        return;
-    }
-    int mid=(start+end)/2;
-    build(2*node,start,mid);
-    build(2*node+1,mid+1,end);
-    segTree[node]=combine(segTree[2*node],segTree[2*node+1]);
-}
-// Single Value update -> update1
-void update1(int node,int start,int end,int ind,int val){
-    if(start==end){
-        // Can be changed according to the question
-        segTree[node].ans=val;
-        return;
-    }
-    int mid=(start+end)/2;
-    if(ind>mid){
-        update1(2*node+1,mid+1,end,ind,val);
-    }
-    else{
-        update1(2*node,start,mid,ind,val);
-    }
-    segTree[node]=combine(segTree[2*node],segTree[2*node+1]);
-}
-// query without lazy propagation.
-NODE query(int node,int start,int end,int l,int r){
-    // First case out of bound, means (l,r) range is not in (start,end)
-    if(start>r||end<l){
-        return NODE();
-    }
-    // If (l,r) is inside (start,end)
-    if(start>=l && end<=r){
-        return segTree[node];
-    }
-    int mid=(start+end)/2;
-    NODE lq=query(2*node,start,mid,l,r);
-    NODE rq=query(2*node+1,mid+1,end,l,r);
-    return combine(lq,rq);
-}
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    e1(n);
-    av(a,n/2);
+    e2(n,m);
+    int on=n;
+    int om=m;
+    int len=-1;
+    int st2=0;
+    n=min(on,om);
+    m=max(on,om);
+    int res=inf;
+    av(a,n*m);
+    sort(all(a));
+    int ind1=min(on,om);
+    int ind2=ind1/2;
+    ind1--;
+    for(int i=ind1;i<n*m-ind2-n-m+2;i++){
+        int j=i+n+m-2;
+        int diff=a[j];
+        diff-=a[i];
+        if(diff<res){
+            res=min(res,diff);
+            len=i;
+        }
+    }
+    vector<vi>arr;
+    arr.resize(n,vi(m,0));
+    int st1=len;
+    
+    fl(i,0,n){
+        arr[i][0]=a[st1];
+        st1++;
+    }
+    // st1+=n;
+    fl(i,1,m){
+        arr[n-1][i]=a[st1];
+        st1++;
+    }
+    for(int i=0;i<n-1;i+=2){
+        arr[i][1]=a[st2];
+        st2++;
+    }
+    for(int i=1;i<n-1;i+=2){
+        arr[i][1]=a[st1]++;
+    }
+    fl(i,0,n-1){
+        fl(j,2,m){
+            if(st2<len){
+                arr[i][j]=a[st2];
+                st2++;
+            }
+            else if(st2>=len){
+                arr[i][j]=a[st2];
+                st2++;
+            }
+        }
+    }
+    vvi ok1;
+    ok1.resize(on,vi(om,0));
+    if(on<=om){
+        fl(i,0,n){
+            fl(j,0,m){
+                ok1[i][j]=arr[i][j];
+            }
+        }
+    }
+    else{
+        fl(i,0,m){
+            fl(j,0,n){
+                ok1[j][i]=arr[j][j];
+            }
+        }
+    }
+    pr(ok1);
+    fl(i,0,on){
+        fl(j,0,om){
+            cout<<ok1[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+
+    
+
+
+
+
 
 }
 int32_t main()
