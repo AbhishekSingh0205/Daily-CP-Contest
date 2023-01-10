@@ -105,51 +105,66 @@ struct mint
         val = (mint(val) * oth).val;
     }
 };
+#define MAXN 9000001
+
+// stores smallest prime factor for every number
+int spf[MAXN];
+
+// Calculating SPF (Smallest Prime Factor) for every
+// number till MAXN.
+// Time Complexity : O(nloglogn)
+void sieve()
+{
+	spf[1] = 1;
+	for (int i=2; i<MAXN; i++)
+
+		// marking smallest prime factor for every
+		// number to be itself.
+		spf[i] = i;
+
+	// separately marking spf for every even
+	// number as 2
+	for (int i=4; i<MAXN; i+=2)
+		spf[i] = 2;
+
+	for (int i=3; i*i<MAXN; i++)
+	{
+		// checking if i is prime
+		if (spf[i] == i)
+		{
+			// marking SPF for all numbers divisible by i
+			for (int j=i*i; j<MAXN; j+=i)
+
+				// marking spf[j] if it is not
+				// previously marked
+				if (spf[j]==j)
+					spf[j] = i;
+		}
+	}
+}
+
 void solve()
 {
-    /*It's WA on 2, oh cleared, This shit is gonna get me TLE. Better luck next time buddy.*/
-    e2(n,m);av(a,n);
-    int sum=0;
-    set<pii>st;
-    int tmp=0;
-    int cnt=0;
-    // pr(st);
-    int pref[m];memset(pref,0,sizeof pref);
-    fl(i,0,m){
-        pref[i]=a[i];
-        if(i){
-            pref[i]+=pref[i-1];
+    /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
+    e1(n);
+    vi prm;
+    for(int i=2;i<MAXN;i++){
+        if(spf[i]==i){
+            prm.pb(i);
         }
     }
-    // pra(pref,m);
-    sum=pref[m-1];
-    for(int i=m-1;i>=0;i--){
-        while(pref[i]<sum){
-            // pr(i);
-            // pr(st);
-            cnt++;
-            pii p=*st.rbegin();
-            sum-=(2*p.ff);
+    for(int i=0;i<prm.size();i++){
+        if(n%prm[i]==0){
+            if(n%(prm[i]*prm[i])==0){
+                cout<<prm[i]<<" "<<n/(prm[i]*prm[i])<<endl;R;
+            }
+            else{
+                int res=sqrtl(n/prm[i]);
+                cout<<res<<" "<<prm[i]<<endl;R;
+            }
+        }
+    }
 
-            st.erase(p);
-        }
-        if(a[i]>0){
-            st.insert({a[i],i});
-        }
-    }
-    st.clear();
-    tmp=sum;
-    fl(i,m,n){
-        tmp+=a[i];
-        st.insert({a[i],i});
-        while(tmp<sum){
-            pii p=*st.begin();
-            cnt++;
-            tmp-=(2*p.ff);
-            st.erase(st.find(p));
-        }
-    }
-    cout<<cnt<<endl;
 
 
 }
@@ -157,6 +172,7 @@ int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
+    sieve();
     cin >> t;
     fl(i, 1, t + 1) {
         solve();

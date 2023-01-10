@@ -2,6 +2,7 @@
 #include <bits/stdc++.h>
 #include<ext/pb_ds/assoc_container.hpp>
 #include<ext/pb_ds/tree_policy.hpp>
+#pragma GCC optimize "trapv"
 using namespace std;
 using namespace __gnu_pbds;
 #define int long long int
@@ -22,7 +23,7 @@ template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order
 #define rz resize
 #define vvi vector<vector<int>>
 #define sz(s) s.size()
-#define mod 2
+#define mod 998244353
 #define ff first
 #define ss second
 #define inf 10e15
@@ -72,92 +73,80 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define prm(mat,row,col){}
 #endif
 // Overloading for mod
-
-struct mint
-{
-    int val;
-    mint(int _val = 0)
-    {
-        val = _val % mod;
-    }
-    mint operator+(mint oth)
-    {
-        return val + oth.val;
-    }
-    mint operator*(mint oth)
-    {
-        return 1LL * val * oth.val;
-    }
-    mint operator-(mint oth)
-    {
-        return val - oth.val + mod;
-    }
-    void operator+=(mint oth)
-    {
-        val = (mint(val) + oth).val;
-    }
-    void operator-=(mint oth)
-    {
-        val = (mint(val) - oth).val;
-    }
-    void operator*=(mint oth)
-    {
-        val = (mint(val) * oth).val;
-    }
-};
+int dp[302][90311][2];
+int a[301];
+//0 being +ive and 1 being -ive
 void solve()
 {
-    /*It's WA on 2, oh cleared, This shit is gonna get me TLE. Better luck next time buddy.*/
-    e2(n,m);av(a,n);
-    int sum=0;
-    set<pii>st;
-    int tmp=0;
-    int cnt=0;
-    // pr(st);
-    int pref[m];memset(pref,0,sizeof pref);
-    fl(i,0,m){
-        pref[i]=a[i];
-        if(i){
-            pref[i]+=pref[i-1];
+    /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
+    memset(dp,0,sizeof dp);
+    // dp[i][j]=#Suffix with ith element having value i.
+    // Ans=Summation(dp[0][j][k]) for each (j,k).
+    e1(n);
+    for(int i=0;i<n;i++){
+        cin>>a[i];
+    }
+    // int res=rec(0,0,0,n);
+    dp[0][0][0]=1;
+    dp[0][0][1]=0;
+    for(int i=0;i<n-1;i++){
+        for(int j=0;j<=90000;j++){
+            for(int k=0;k<2;k++){
+                dp[i][j][k]%=mod;
+                dp[i][j][k]+=mod;
+                dp[i][j][k]%=mod;
+                // Current Value (j with sign k)
+                if(k==0){
+                    int newV=a[i+1]+j;
+                    dp[i+1][newV][0]+=dp[i][j][k]%mod;
+                    newV=a[i+1]-j;
+                    if(newV>=0 && j){
+                        dp[i+1][abs(newV)][0]+=dp[i][j][k]%mod;
+                        dp[i+1][abs(newV)][0]%=mod;
+                    }
+                    else if(newV<0){
+                        dp[i+1][abs(newV)][1]+=dp[i][j][k]%mod;
+                        dp[i+1][abs(newV)][1]%=mod;
+                    }
+                }
+                else{
+                    int jj=-j;
+                    int newV=a[i+1]+jj;
+                    if(newV>=0){
+                        dp[i+1][abs(newV)][0]+=dp[i][j][k]%mod;
+                    }     
+                    else{
+                        dp[i+1][abs(newV)][1]+=dp[i][j][k]%mod;
+                    }
+                    newV=a[i+1]-jj;
+                    if(jj){
+                        if(newV>=0){
+                            dp[i+1][abs(newV)][0]+=dp[i][j][k]%mod;
+                        }     
+                        else{
+                            dp[i+1][abs(newV)][1]+=dp[i][j][k]%mod;
+                        }
+                    }
+                }
+                
+            }
         }
     }
-    // pra(pref,m);
-    sum=pref[m-1];
-    for(int i=m-1;i>=0;i--){
-        while(pref[i]<sum){
-            // pr(i);
-            // pr(st);
-            cnt++;
-            pii p=*st.rbegin();
-            sum-=(2*p.ff);
-
-            st.erase(p);
-        }
-        if(a[i]>0){
-            st.insert({a[i],i});
+    int res=0;
+    for(int i=0;i<=90000;i++){
+        for(int k=0;k<2;k++){
+            res+=dp[n-1][i][k];
+            res%=mod;
         }
     }
-    st.clear();
-    tmp=sum;
-    fl(i,m,n){
-        tmp+=a[i];
-        st.insert({a[i],i});
-        while(tmp<sum){
-            pii p=*st.begin();
-            cnt++;
-            tmp-=(2*p.ff);
-            st.erase(st.find(p));
-        }
-    }
-    cout<<cnt<<endl;
-
+    cout<<res<<endl;
 
 }
 int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    cin >> t;
+    // cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

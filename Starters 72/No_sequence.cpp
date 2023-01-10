@@ -73,83 +73,48 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #endif
 // Overloading for mod
 
-struct mint
-{
-    int val;
-    mint(int _val = 0)
-    {
-        val = _val % mod;
-    }
-    mint operator+(mint oth)
-    {
-        return val + oth.val;
-    }
-    mint operator*(mint oth)
-    {
-        return 1LL * val * oth.val;
-    }
-    mint operator-(mint oth)
-    {
-        return val - oth.val + mod;
-    }
-    void operator+=(mint oth)
-    {
-        val = (mint(val) + oth).val;
-    }
-    void operator-=(mint oth)
-    {
-        val = (mint(val) - oth).val;
-    }
-    void operator*=(mint oth)
-    {
-        val = (mint(val) * oth).val;
-    }
-};
 void solve()
 {
-    /*It's WA on 2, oh cleared, This shit is gonna get me TLE. Better luck next time buddy.*/
-    e2(n,m);av(a,n);
+    /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
+    e3(n,k,s);
+    int a[101];memset(a,0,sizeof a);
+    int tmp=s;
+    int i=0;
+    while(tmp){
+        a[i]=tmp%k;i++;
+        tmp/=k;
+    }
+    fl(i,0,100){
+        if(a[i]==k-1 && a[i]!=1){
+            a[i]=-1;
+            a[i+1]++;
+        }
+        if(a[i]==k){
+            a[i]=0;
+            a[i+1]++;
+        }
+    }
+    int curr=1;
     int sum=0;
-    set<pii>st;
-    int tmp=0;
-    int cnt=0;
-    // pr(st);
-    int pref[m];memset(pref,0,sizeof pref);
-    fl(i,0,m){
-        pref[i]=a[i];
-        if(i){
-            pref[i]+=pref[i-1];
+    fl(i,0,n){
+        sum+=(a[i]*curr);
+        curr*=k;
+    }
+    bool is=false;
+    fl(i,0,n){
+        if(!(a[i]==0||a[i]==1||a[i]==-1)){
+            is=true;
         }
     }
-    // pra(pref,m);
-    sum=pref[m-1];
-    for(int i=m-1;i>=0;i--){
-        while(pref[i]<sum){
-            // pr(i);
-            // pr(st);
-            cnt++;
-            pii p=*st.rbegin();
-            sum-=(2*p.ff);
+    if(sum!=s||is){
+        cout<<-2<<endl;R;
+    }
+    fl(i,0,n){
+        cout<<a[i]<<" ";
+    }
+    cout<<endl;
+    
 
-            st.erase(p);
-        }
-        if(a[i]>0){
-            st.insert({a[i],i});
-        }
-    }
-    st.clear();
-    tmp=sum;
-    fl(i,m,n){
-        tmp+=a[i];
-        st.insert({a[i],i});
-        while(tmp<sum){
-            pii p=*st.begin();
-            cnt++;
-            tmp-=(2*p.ff);
-            st.erase(st.find(p));
-        }
-    }
-    cout<<cnt<<endl;
 
 
 }

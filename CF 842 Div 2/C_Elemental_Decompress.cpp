@@ -107,50 +107,93 @@ struct mint
 };
 void solve()
 {
-    /*It's WA on 2, oh cleared, This shit is gonna get me TLE. Better luck next time buddy.*/
-    e2(n,m);av(a,n);
-    int sum=0;
-    set<pii>st;
-    int tmp=0;
-    int cnt=0;
+    /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
+    e1(n);
+    av(a,n);
+    map<int,vi>m;
+    fl(i,0,n){
+        m[a[i]].pb(i);
+    }
+    if(m.find(1)!=m.end() && m[1].size()>1){
+        cout<<"NO"<<endl;R;
+    }
+    for(auto &v:m){
+        if(v.ss.size()>2){
+            cout<<"NO"<<endl;R;
+        }
+    }
+    // pr("Here");
+    // pr(m);
+    int pera[n];
+    int perb[n];memset(pera,0,sizeof pera);
+    memset(perb,0,sizeof perb);
+    int visa[n+1];
+    int visb[n+1];
+    memset(visa,0,sizeof visa);
+    memset(visb,0,sizeof visb);
+    for(auto v:m){
+        if(v.ss.size()>=2){
+            visa[v.ff]=1;
+            visb[v.ff]=1;
+            pera[v.ss[0]]=v.ff;
+            perb[v.ss[1]]=v.ff;
+            C;
+        }
+        if(v.ss.size()==1 && v.ff==1){
+            visa[v.ff]=1;
+            visb[v.ff]=1;
+            pera[v.ss[0]]=v.ff;
+            perb[v.ss[0]]=v.ff;
+            C;
+        }
+        visa[v.ff]=1;
+        pera[v.ss[0]]=v.ff;
+    }
+    set<int>st;
+    set<int>st1;
+    for(int i=1;i<=n;i++){
+        if(visb[i]==0){
+            st.insert(i);
+        }
+        if(visa[i]==0){
+            st1.insert(i);
+        }
+    }
     // pr(st);
-    int pref[m];memset(pref,0,sizeof pref);
-    fl(i,0,m){
-        pref[i]=a[i];
-        if(i){
-            pref[i]+=pref[i-1];
-        }
-    }
-    // pra(pref,m);
-    sum=pref[m-1];
-    for(int i=m-1;i>=0;i--){
-        while(pref[i]<sum){
-            // pr(i);
-            // pr(st);
-            cnt++;
-            pii p=*st.rbegin();
-            sum-=(2*p.ff);
+    // pr(st1);
 
-            st.erase(p);
+    for(int i=0;i<n;i++){
+        if(pera[i]!=0 && perb[i]==0){
+            auto it=st.upper_bound(pera[i]);
+            if(it==st.begin()){
+                cout<<"NO"<<endl;R;
+            }
+            it--;
+            perb[i]=*it;
+            st.erase(it);
         }
-        if(a[i]>0){
-            st.insert({a[i],i});
+        else if(pera[i]!=0 && perb[i]!=0){
+            C;
+        }
+        else if(pera[i]==0 && perb[i]!=0){
+            auto it=st1.upper_bound(perb[i]);
+            if(it==st1.begin()){
+                cout<<"NO"<<endl;R;
+            }
+            it--;
+            pera[i]=*it;
+            st1.erase(it);
         }
     }
-    st.clear();
-    tmp=sum;
-    fl(i,m,n){
-        tmp+=a[i];
-        st.insert({a[i],i});
-        while(tmp<sum){
-            pii p=*st.begin();
-            cnt++;
-            tmp-=(2*p.ff);
-            st.erase(st.find(p));
-        }
+    cout<<"YES"<<endl;
+    for(int i=0;i<n;i++){
+        cout<<pera[i]<<" ";
     }
-    cout<<cnt<<endl;
-
+    cout<<endl;
+    for(int i=0;i<n;i++){
+        cout<<perb[i]<<" ";
+    }
+    cout<<endl;
 
 }
 int32_t main()

@@ -107,49 +107,17 @@ struct mint
 };
 void solve()
 {
-    /*It's WA on 2, oh cleared, This shit is gonna get me TLE. Better luck next time buddy.*/
-    e2(n,m);av(a,n);
-    int sum=0;
-    set<pii>st;
-    int tmp=0;
-    int cnt=0;
-    // pr(st);
-    int pref[m];memset(pref,0,sizeof pref);
-    fl(i,0,m){
-        pref[i]=a[i];
-        if(i){
-            pref[i]+=pref[i-1];
-        }
+    /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
+    e1(n);
+    vector<string> a;
+    fl(i,0,n){
+        es(s);
+        a.pb(s);
     }
-    // pra(pref,m);
-    sum=pref[m-1];
-    for(int i=m-1;i>=0;i--){
-        while(pref[i]<sum){
-            // pr(i);
-            // pr(st);
-            cnt++;
-            pii p=*st.rbegin();
-            sum-=(2*p.ff);
+    for(int i=n-1;i>=0;i--){
+        cout<<a[i]<<endl;
+    }
 
-            st.erase(p);
-        }
-        if(a[i]>0){
-            st.insert({a[i],i});
-        }
-    }
-    st.clear();
-    tmp=sum;
-    fl(i,m,n){
-        tmp+=a[i];
-        st.insert({a[i],i});
-        while(tmp<sum){
-            pii p=*st.begin();
-            cnt++;
-            tmp-=(2*p.ff);
-            st.erase(st.find(p));
-        }
-    }
-    cout<<cnt<<endl;
 
 
 }
@@ -157,7 +125,7 @@ int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    cin >> t;
+    // cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

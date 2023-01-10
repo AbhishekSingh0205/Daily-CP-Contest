@@ -49,7 +49,7 @@ template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order
 #define NS cout<<"No"<<"\n"
 #define lcm(a,b) (a/__gcd(a,b))*b
 #define pa(a) for(auto e:a)cout<<e<<" "
-const int N = 1e5 + 5;
+const int N = 2e5 + 5;
 int dx[4] = { -1, 1, 0, 0};
 int dy[4] = {0, 0, -1, 1};
 int kx[8] = { -1, 1, 0, 0, -1, -1, 1, 1};
@@ -73,83 +73,94 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #endif
 // Overloading for mod
 
-struct mint
-{
-    int val;
-    mint(int _val = 0)
-    {
-        val = _val % mod;
+int rnk[N];
+int parent[N];
+int find(int a){
+    // pr(a,parent[a]);
+    if(parent[a]==a){
+        return a;
     }
-    mint operator+(mint oth)
+    return parent[a]=find(parent[a]);
+}
+void join(int a,int b){
+    a=find(a);
+    b=find(b);
+    if(a==b)
     {
-        return val + oth.val;
+        return;
     }
-    mint operator*(mint oth)
-    {
-        return 1LL * val * oth.val;
+    // a->b
+    if(rnk[a]>rnk[b]){
+        swap(a,b);
     }
-    mint operator-(mint oth)
-    {
-        return val - oth.val + mod;
-    }
-    void operator+=(mint oth)
-    {
-        val = (mint(val) + oth).val;
-    }
-    void operator-=(mint oth)
-    {
-        val = (mint(val) - oth).val;
-    }
-    void operator*=(mint oth)
-    {
-        val = (mint(val) * oth).val;
-    }
-};
+    parent[a]=b;
+    rnk[b]+=rnk[a];
+}
 void solve()
 {
-    /*It's WA on 2, oh cleared, This shit is gonna get me TLE. Better luck next time buddy.*/
-    e2(n,m);av(a,n);
-    int sum=0;
-    set<pii>st;
-    int tmp=0;
-    int cnt=0;
-    // pr(st);
-    int pref[m];memset(pref,0,sizeof pref);
-    fl(i,0,m){
-        pref[i]=a[i];
-        if(i){
-            pref[i]+=pref[i-1];
-        }
+    /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
+    e1(n);
+    int a[n+1];
+    fl(i,1,n+1){
+        cin>>a[i];
     }
-    // pra(pref,m);
-    sum=pref[m-1];
-    for(int i=m-1;i>=0;i--){
-        while(pref[i]<sum){
+    fl(i,0,n+1){
+        parent[i]=i;
+        rnk[i]=1;
+    }    
+    int vis[n+1];memset(vis,0,sizeof vis);
+    int i=1;
+    // pr("hjere");
+    while(i<=n){
+        // pr(i);
+        if(vis[i]==1){
+            i++;C;
+        }
+        if(a[i]==i){
+            vis[i]=1;
+            join(i,a[i]);
+            i++;
+        }   
+        else{
+            // pr("H1");
+            join(i,a[i]);
+            // pr("don");
+            int p=i;
+            vis[i]=1;
+            vis[a[i]]=1;
+            i=a[i];
+            while(a[i]!=p){
+                vis[a[i]]=1;
+                join(i,a[i]);
+                i=a[i];
+            }
             // pr(i);
-            // pr(st);
-            cnt++;
-            pii p=*st.rbegin();
-            sum-=(2*p.ff);
+            i=p;
+            i++;
+        }
+    }
+    // pr("here");
+    int cyc=0;
+    fl(i,1,n+1){
+        int x=find(i);
+        if(x==i){
+            cyc++;
+        }
+    }
+    int ans=inf;
+    fl(i,1,n){
+        int num=cyc;
+        if(find(i)!=find(i+1)){
+            num--;
+        }
+        if(find(i)==find(i+1)){
+            num++;
+        }
+        ans=min(ans,n-num);
+    }
+    cout<<ans<<endl;
 
-            st.erase(p);
-        }
-        if(a[i]>0){
-            st.insert({a[i],i});
-        }
-    }
-    st.clear();
-    tmp=sum;
-    fl(i,m,n){
-        tmp+=a[i];
-        st.insert({a[i],i});
-        while(tmp<sum){
-            pii p=*st.begin();
-            cnt++;
-            tmp-=(2*p.ff);
-            st.erase(st.find(p));
-        }
-    }
-    cout<<cnt<<endl;
+
 
 
 }

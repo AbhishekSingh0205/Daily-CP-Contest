@@ -49,7 +49,7 @@ template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order
 #define NS cout<<"No"<<"\n"
 #define lcm(a,b) (a/__gcd(a,b))*b
 #define pa(a) for(auto e:a)cout<<e<<" "
-const int N = 1e5 + 5;
+const int N = 2e5 + 5;
 int dx[4] = { -1, 1, 0, 0};
 int dy[4] = {0, 0, -1, 1};
 int kx[8] = { -1, 1, 0, 0, -1, -1, 1, 1};
@@ -105,51 +105,38 @@ struct mint
         val = (mint(val) * oth).val;
     }
 };
+int vis[N];
+int cnt=1;
+vi gr[N];
+void dfs(int src,int par){
+    if(cnt>=1000000){
+        return;
+    }
+    for(auto v:gr[src]){
+        if(v!=par && vis[v]==0){
+            cnt++;
+            vis[v]=1;
+            dfs(v,src);
+            vis[v]=0;
+        }
+    }
+}
 void solve()
 {
-    /*It's WA on 2, oh cleared, This shit is gonna get me TLE. Better luck next time buddy.*/
-    e2(n,m);av(a,n);
-    int sum=0;
-    set<pii>st;
-    int tmp=0;
-    int cnt=0;
-    // pr(st);
-    int pref[m];memset(pref,0,sizeof pref);
+    /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
+    e2(n,m);
+    fl(i,0,n+1){
+        vis[i]=0;
+    }
     fl(i,0,m){
-        pref[i]=a[i];
-        if(i){
-            pref[i]+=pref[i-1];
-        }
+        e2(x,y);
+        gr[x].pb(y);
+        gr[y].pb(x);
     }
-    // pra(pref,m);
-    sum=pref[m-1];
-    for(int i=m-1;i>=0;i--){
-        while(pref[i]<sum){
-            // pr(i);
-            // pr(st);
-            cnt++;
-            pii p=*st.rbegin();
-            sum-=(2*p.ff);
+    vis[1]=1;
+    dfs(1,-1);
+    cout<<min(cnt,1000000*1ll)<<endl;
 
-            st.erase(p);
-        }
-        if(a[i]>0){
-            st.insert({a[i],i});
-        }
-    }
-    st.clear();
-    tmp=sum;
-    fl(i,m,n){
-        tmp+=a[i];
-        st.insert({a[i],i});
-        while(tmp<sum){
-            pii p=*st.begin();
-            cnt++;
-            tmp-=(2*p.ff);
-            st.erase(st.find(p));
-        }
-    }
-    cout<<cnt<<endl;
 
 
 }
@@ -157,7 +144,7 @@ int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    cin >> t;
+    // cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

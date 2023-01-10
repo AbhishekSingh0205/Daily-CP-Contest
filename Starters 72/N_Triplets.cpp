@@ -107,49 +107,40 @@ struct mint
 };
 void solve()
 {
-    /*It's WA on 2, oh cleared, This shit is gonna get me TLE. Better luck next time buddy.*/
-    e2(n,m);av(a,n);
-    int sum=0;
-    set<pii>st;
-    int tmp=0;
-    int cnt=0;
-    // pr(st);
-    int pref[m];memset(pref,0,sizeof pref);
-    fl(i,0,m){
-        pref[i]=a[i];
-        if(i){
-            pref[i]+=pref[i-1];
+    /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
+    int a=1,b=1,c=1;
+    e1(n);
+    int on=n;
+    for(int i=2;i*i<=n;i++){
+        if(n%i==0){
+            a=i;B;
         }
     }
-    // pra(pref,m);
-    sum=pref[m-1];
-    for(int i=m-1;i>=0;i--){
-        while(pref[i]<sum){
-            // pr(i);
-            // pr(st);
-            cnt++;
-            pii p=*st.rbegin();
-            sum-=(2*p.ff);
-
-            st.erase(p);
-        }
-        if(a[i]>0){
-            st.insert({a[i],i});
+    n/=a;
+    for(int i=2;i*i<=n;i++){
+        if(i!=a && n%i==0){
+            b=i;B;
         }
     }
-    st.clear();
-    tmp=sum;
-    fl(i,m,n){
-        tmp+=a[i];
-        st.insert({a[i],i});
-        while(tmp<sum){
-            pii p=*st.begin();
-            cnt++;
-            tmp-=(2*p.ff);
-            st.erase(st.find(p));
-        }
+    if(b==1){
+        b=n;
     }
-    cout<<cnt<<endl;
+    // pr(a,b);
+    n/=b;
+    int req=on/(a*b);
+    c=req;
+    if(c==b){
+        c*=b;
+        b=1;
+    }
+    else if(a==c){
+        c*=a;
+        a=1;
+    }
+    if(a==b||b==c||c==a){
+        cout<<-1<<endl;R;
+    }
+    cout<<a<<" "<<b<<" "<<c<<endl;
 
 
 }

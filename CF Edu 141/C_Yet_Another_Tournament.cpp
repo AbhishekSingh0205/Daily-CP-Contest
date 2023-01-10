@@ -105,51 +105,75 @@ struct mint
         val = (mint(val) * oth).val;
     }
 };
+bool good(vi &a,int val[],int mid,int m){
+    vi c=a;
+    int n=c.size();
+    int win=val[n-mid];
+    int win2=0;
+    if(a[n-mid]<=m){
+        win2++;
+        win--;
+        m-=a[n-mid];
+    }
+    c[n-mid]=inf;
+    sort(all(c));
+    for(int i=0;i<n;i++){
+        if(i){
+            c[i]+=c[i-1];
+        }
+    }
+    win2+=(UB(all(c),m)-c.begin());
+    if(win2>=win){
+        return true;
+    }
+    return false;
+}
 void solve()
 {
-    /*It's WA on 2, oh cleared, This shit is gonna get me TLE. Better luck next time buddy.*/
-    e2(n,m);av(a,n);
+    /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
+    e1(n);e1(m);
+    av(a,n);
+    vi b=a;
+    sort(all(a));
+    int val[n];memset(val,0,sizeof val);
+    fl(i,0,n){
+        val[i]=1;
+    }   
     int sum=0;
-    set<pii>st;
-    int tmp=0;
     int cnt=0;
-    // pr(st);
-    int pref[m];memset(pref,0,sizeof pref);
-    fl(i,0,m){
-        pref[i]=a[i];
+    mii m2;
+    for(int i=n-1;i>=0;i--){
+        val[i]+=(i);
+    }
+    for(int i=0;i<n;i++){
         if(i){
-            pref[i]+=pref[i-1];
+            a[i]+=a[i-1];
         }
     }
-    // pra(pref,m);
-    sum=pref[m-1];
-    for(int i=m-1;i>=0;i--){
-        while(pref[i]<sum){
-            // pr(i);
-            // pr(st);
-            cnt++;
-            pii p=*st.rbegin();
-            sum-=(2*p.ff);
+    if(a[n-1]<=m){
+        cout<<1<<endl;R;
+    }
+    if(a[0]>m){
+        cout<<n+1<<endl;R;
+    }
+    int l=1,h=n;
+    int ans=h;
+    while(l<=h){
+        int mid=(l+h)/2;
+        bool is=false;
+        if(upper_bound(all(a),m)-a.begin()>=val[n-mid]){
+            is=true;
+        }
+        if(is||good(b,val,mid,m)){
+            h=mid-1;
+            ans=mid;
+        }
+        else{
+            l=mid+1;
+        }
+    }
+    cout<<ans<<endl;
 
-            st.erase(p);
-        }
-        if(a[i]>0){
-            st.insert({a[i],i});
-        }
-    }
-    st.clear();
-    tmp=sum;
-    fl(i,m,n){
-        tmp+=a[i];
-        st.insert({a[i],i});
-        while(tmp<sum){
-            pii p=*st.begin();
-            cnt++;
-            tmp-=(2*p.ff);
-            st.erase(st.find(p));
-        }
-    }
-    cout<<cnt<<endl;
 
 
 }

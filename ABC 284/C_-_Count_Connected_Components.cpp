@@ -105,51 +105,48 @@ struct mint
         val = (mint(val) * oth).val;
     }
 };
+int rnk[1001];
+int parent[1001];
+int find(int x){
+    if(parent[x]==x){
+        return x;
+    }
+    return parent[x]=find(parent[x]);
+}
+void join(int a,int b){
+    a=find(a);
+    b=find(b);
+    if(a==b){
+        return;
+    }
+    // a->b;
+    if(rnk[a]>rnk[b]){
+        swap(a,b);
+    }
+    parent[a]=b;
+    rnk[b]+=rnk[a];
+}
 void solve()
 {
-    /*It's WA on 2, oh cleared, This shit is gonna get me TLE. Better luck next time buddy.*/
-    e2(n,m);av(a,n);
-    int sum=0;
-    set<pii>st;
-    int tmp=0;
-    int cnt=0;
-    // pr(st);
-    int pref[m];memset(pref,0,sizeof pref);
+    /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
+    e1(n);
+    fl(i,0,n+1){
+        parent[i]=i;
+        rnk[i]=1;
+    }
+    e1(m);
     fl(i,0,m){
-        pref[i]=a[i];
-        if(i){
-            pref[i]+=pref[i-1];
-        }
+        e2(x,y);
+        join(x,y);
     }
-    // pra(pref,m);
-    sum=pref[m-1];
-    for(int i=m-1;i>=0;i--){
-        while(pref[i]<sum){
-            // pr(i);
-            // pr(st);
+    int cnt=0;
+    fl(i,1,n+1){
+        if(find(i)==i){
             cnt++;
-            pii p=*st.rbegin();
-            sum-=(2*p.ff);
-
-            st.erase(p);
-        }
-        if(a[i]>0){
-            st.insert({a[i],i});
-        }
-    }
-    st.clear();
-    tmp=sum;
-    fl(i,m,n){
-        tmp+=a[i];
-        st.insert({a[i],i});
-        while(tmp<sum){
-            pii p=*st.begin();
-            cnt++;
-            tmp-=(2*p.ff);
-            st.erase(st.find(p));
         }
     }
     cout<<cnt<<endl;
+
 
 
 }
@@ -157,7 +154,7 @@ int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    cin >> t;
+    // cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }
