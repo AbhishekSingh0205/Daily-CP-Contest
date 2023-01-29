@@ -74,50 +74,40 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    // Video Solution : https://www.youtube.com/watch?v=LfsQ0w1xHUc&ab_channel=CompetitiveCoding-NewtonSchool
-    // Awesomness = Number of Baricades + 1
-    e2(n,m);
-    av(a,n);
-    int ans=0;
-    fl(i,0,n-1){
-        if(a[i]!=a[i+1]){
-            ans+=((i+1)*(n-(i+1)));
-        }
-    }
-    ans+=(n*(n+1))/2;
+    e1(n);av(a,n);av(b,n);
+    set<int>st;
+    e1(m);
+    multiset<int>mt;
     fl(i,0,m){
-        e2(id,x);
-        id--;
-        int prev=ans;
-        if(id){
-            if((a[id]==a[id-1]) && (a[id]!=x)){
-                prev+=((id)*(n-id));
-            }
-            else if(a[id]!=a[id-1] && (a[id-1]==x)){
-                prev-=((id)*(n-id));
-            }
-        }
-        if(id+1<n){
-            if((a[id]==a[id+1]) && a[id]!=x){
-                prev+=((id+1)*(n-(id+1)));
-            }
-            else if(a[id]!=a[id+1] && a[id+1]==x){
-                prev-=((id+1)*(n-(id+1)));
-            }
-        }
-        a[id]=x;
-        ans=prev;
-        cout<<ans<<endl;
+        e1(x);mt.insert(x);
     }
-
-
+    for(int i=0;i<n;i++){
+        if(a[i]<b[i]){
+            cout<<"NO"<<endl;R;
+        }
+        while(st.size() && (*st.begin())<b[i]){
+            st.erase(st.begin());
+        }
+        if(a[i]!=b[i]){
+            if(st.find(b[i])!=st.end()){
+                a[i]=b[i];C;
+            }
+            if(mt.find(b[i])==mt.end()){
+                cout<<"NO"<<endl;R;
+            }
+            st.insert(b[i]);
+            mt.erase(mt.find(b[i]));
+            a[i]=b[i];
+        }
+    }   
+    cout<<"YES"<<endl;
 
 }
 int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    // cin >> t;
+    cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

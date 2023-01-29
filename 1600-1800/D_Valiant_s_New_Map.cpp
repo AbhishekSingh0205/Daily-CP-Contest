@@ -71,45 +71,79 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
+bool good(vector<vi>&a,int mid){
+    int arr[a.size()][a[0].size()];
+    int n=a.size(),m=a[0].size();
+    fl(i,0,n){
+        fl(j,0,m){
+            arr[i][j]=a[i][j];
+            if(arr[i][j]>=mid){
+                arr[i][j]=1;
+            }
+            else{
+                arr[i][j]=0;
+            }
+        }
+    }
+    fl(i,0,n){
+        fl(j,1,m){
+            arr[i][j]+=arr[i][j-1];
+        }
+    }
+    fl(i,0,n){
+        fl(j,0,m){
+            if(i){
+                arr[i][j]+=arr[i-1][j];
+            }
+        }
+    }
+    fl(i,0,n){
+        fl(j,0,m){
+            if(i>=mid-1 && j>=mid-1){
+                int ans=arr[i][j];
+                int tpr=i-mid;
+                int tpc=j-mid;
+                if(tpc>=0){
+                    ans-=arr[i][tpc];
+                }
+                if(tpr>=0){
+                    ans-=arr[tpr][j];
+                }
+                if(tpr>=0 && tpc>=0){
+                    ans+=arr[tpr][tpc];
+                }
+                if(ans==(mid*mid)){
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+
+}
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    // Video Solution : https://www.youtube.com/watch?v=LfsQ0w1xHUc&ab_channel=CompetitiveCoding-NewtonSchool
-    // Awesomness = Number of Baricades + 1
     e2(n,m);
-    av(a,n);
+    vector<vi>a(n,vi(m));
+    fl(i,0,n){
+        fl(j,0,m){
+            cin>>a[i][j];
+        }
+    } 
     int ans=0;
-    fl(i,0,n-1){
-        if(a[i]!=a[i+1]){
-            ans+=((i+1)*(n-(i+1)));
+    int l=1,h=min(n,m);
+    while(l<=h){
+        int mid=(l+h)/2;
+        if(good(a,mid)){
+            ans=mid;
+            l=mid+1;
+        }
+        else{
+            h=mid-1;
         }
     }
-    ans+=(n*(n+1))/2;
-    fl(i,0,m){
-        e2(id,x);
-        id--;
-        int prev=ans;
-        if(id){
-            if((a[id]==a[id-1]) && (a[id]!=x)){
-                prev+=((id)*(n-id));
-            }
-            else if(a[id]!=a[id-1] && (a[id-1]==x)){
-                prev-=((id)*(n-id));
-            }
-        }
-        if(id+1<n){
-            if((a[id]==a[id+1]) && a[id]!=x){
-                prev+=((id+1)*(n-(id+1)));
-            }
-            else if(a[id]!=a[id+1] && a[id+1]==x){
-                prev-=((id+1)*(n-(id+1)));
-            }
-        }
-        a[id]=x;
-        ans=prev;
-        cout<<ans<<endl;
-    }
-
+    cout<<ans<<endl;
 
 
 }
@@ -117,7 +151,7 @@ int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    // cin >> t;
+    cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

@@ -22,7 +22,7 @@ template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order
 #define rz resize
 #define vvi vector<vector<int>>
 #define sz(s) s.size()
-#define mod 2
+#define mod 1000000007
 #define ff first
 #define ss second
 #define inf 10e15
@@ -71,44 +71,94 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
+long long binpow(long long a, long long b, long long m) {
+    a %= m;
+    long long res = 1;
+    while (b > 0) {
+        if (b & 1)
+            res = res * a % m;
+        a = a * a % m;
+        b >>= 1;
+    }
+    return res;
+}
+int gcdExtended(int a, int b, int* x, int* y);
+ 
+// Function to find modulo inverse of a
+int modInverse(int A, int M)
+{
+    int x, y;
+    int g = gcdExtended(A, M, &x, &y);
+    int res = (x % M + M) % M;
+    return res;
+}
+ 
+// Function for extended Euclidean Algorithm
+int gcdExtended(int a, int b, int* x, int* y)
+{
+ 
+    // Base Case
+    if (a == 0) {
+        *x = 0, *y = 1;
+        return b;
+    }
+ 
+    // To store results of recursive call
+    int x1, y1;
+    int gcd = gcdExtended(b % a, a, &x1, &y1);
+ 
+    // Update x and y using results of recursive
+    // call
+    *x = y1 - (b / a) * x1;
+    *y = x1;
+ 
+    return gcd;
+}
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    // Video Solution : https://www.youtube.com/watch?v=LfsQ0w1xHUc&ab_channel=CompetitiveCoding-NewtonSchool
-    // Awesomness = Number of Baricades + 1
-    e2(n,m);
-    av(a,n);
-    int ans=0;
-    fl(i,0,n-1){
-        if(a[i]!=a[i+1]){
-            ans+=((i+1)*(n-(i+1)));
-        }
+    e1(n);
+    es(a);es(b);
+    int sm=0,df=0;
+    fl(i,0,n){
+        if(a[i]!=b[i])df++;
+        else sm++;
     }
-    ans+=(n*(n+1))/2;
-    fl(i,0,m){
-        e2(id,x);
-        id--;
-        int prev=ans;
-        if(id){
-            if((a[id]==a[id-1]) && (a[id]!=x)){
-                prev+=((id)*(n-id));
-            }
-            else if(a[id]!=a[id-1] && (a[id-1]==x)){
-                prev-=((id)*(n-id));
-            }
-        }
-        if(id+1<n){
-            if((a[id]==a[id+1]) && a[id]!=x){
-                prev+=((id+1)*(n-(id+1)));
-            }
-            else if(a[id]!=a[id+1] && a[id+1]==x){
-                prev-=((id+1)*(n-(id+1)));
-            }
-        }
-        a[id]=x;
-        ans=prev;
-        cout<<ans<<endl;
+    // pr(df,sm);
+    if(df%2){
+        cout<<0<<endl;R;
     }
+    int ans=1;
+    ans*=binpow(2,sm,mod);
+    int diff=df;
+    int ans2=1;
+    int ans3=1;
+    int diff2=df/2;
+    int val=0;
+    for(int i=0;i<df/2;i++){
+        ans2*=diff;
+        diff--;
+        ans3*=diff2;
+        diff2--;
+        ans3%=mod;
+        ans3+=mod;
+        ans3%=mod;
+        ans2%=mod;
+        ans2+=mod;
+        ans2%=mod;
+        val=1;
+    }
+    if(val){
+        ans2%=mod;ans2+=mod;ans2%=mod;
+    }
+    ans3=modInverse(ans3,mod);
+    ans2*=ans3;
+    ans2%=mod;ans2+=mod;ans2%=mod;
+    int res=(ans%mod)*(ans2%mod);
+    res%=mod;
+    res+=mod;
+    res%=mod;
+    cout<<res<<endl;
 
 
 
@@ -117,7 +167,7 @@ int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    // cin >> t;
+    cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

@@ -71,44 +71,57 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
+vi gr[N];
+int size[N],heavy[N],parent[N];
+int depth[N];
+int head[N],lt[N],pos[N];
+int idx=0;
+void dfs(int src,int p){
+    for(auto c:gr[src]){
+        if(c!=p){
+            depth[c]=depth[src]+1;
+            parent[c]=src;
+            dfs(c,src);
+            size[src]+=size[c];
+            if(size[c]>size[heavy[src]]){
+                heavy[src]=c;
+            }
+        }
+
+    }
+    size[src]++;
+}
+void dfsHLD(int src,int chain){
+    head[src]=chain;
+    pos[src]=idx;
+    idx++;
+    // lt[src]=value[src]
+    if(heavy[src]!=0){
+        dfsHLD(heavy[src],chain);
+    }
+    for(auto v:gr[src]){
+        if(v!=parent[v] && v!=heavy[src]){
+            dfsHLD(v,v);
+        }
+    }
+}
+int lca(int a,int b){
+    while(head[a]!=head[b]){
+        if(depth[head[a]]<depth[head[b]]){
+            swap(a,b);
+        }
+        // depth[head[a]]<depth[head[b]]
+        a=parent[head[a]];
+    }
+    if(depth[a]<depth[b]){
+        swap(a,b);
+    }
+    return b;
+}
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    // Video Solution : https://www.youtube.com/watch?v=LfsQ0w1xHUc&ab_channel=CompetitiveCoding-NewtonSchool
-    // Awesomness = Number of Baricades + 1
-    e2(n,m);
-    av(a,n);
-    int ans=0;
-    fl(i,0,n-1){
-        if(a[i]!=a[i+1]){
-            ans+=((i+1)*(n-(i+1)));
-        }
-    }
-    ans+=(n*(n+1))/2;
-    fl(i,0,m){
-        e2(id,x);
-        id--;
-        int prev=ans;
-        if(id){
-            if((a[id]==a[id-1]) && (a[id]!=x)){
-                prev+=((id)*(n-id));
-            }
-            else if(a[id]!=a[id-1] && (a[id-1]==x)){
-                prev-=((id)*(n-id));
-            }
-        }
-        if(id+1<n){
-            if((a[id]==a[id+1]) && a[id]!=x){
-                prev+=((id+1)*(n-(id+1)));
-            }
-            else if(a[id]!=a[id+1] && a[id+1]==x){
-                prev-=((id+1)*(n-(id+1)));
-            }
-        }
-        a[id]=x;
-        ans=prev;
-        cout<<ans<<endl;
-    }
+
 
 
 
@@ -117,7 +130,7 @@ int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    // cin >> t;
+    cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

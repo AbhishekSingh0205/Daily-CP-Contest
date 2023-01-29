@@ -74,42 +74,44 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    // Video Solution : https://www.youtube.com/watch?v=LfsQ0w1xHUc&ab_channel=CompetitiveCoding-NewtonSchool
-    // Awesomness = Number of Baricades + 1
-    e2(n,m);
-    av(a,n);
-    int ans=0;
-    fl(i,0,n-1){
-        if(a[i]!=a[i+1]){
-            ans+=((i+1)*(n-(i+1)));
-        }
-    }
-    ans+=(n*(n+1))/2;
-    fl(i,0,m){
-        e2(id,x);
-        id--;
-        int prev=ans;
-        if(id){
-            if((a[id]==a[id-1]) && (a[id]!=x)){
-                prev+=((id)*(n-id));
-            }
-            else if(a[id]!=a[id-1] && (a[id-1]==x)){
-                prev-=((id)*(n-id));
-            }
-        }
-        if(id+1<n){
-            if((a[id]==a[id+1]) && a[id]!=x){
-                prev+=((id+1)*(n-(id+1)));
-            }
-            else if(a[id]!=a[id+1] && a[id+1]==x){
-                prev-=((id+1)*(n-(id+1)));
-            }
-        }
-        a[id]=x;
-        ans=prev;
-        cout<<ans<<endl;
-    }
-
+    /*
+        1 6 13 22 97 -> Ans (+3)
+        4,9,16,25,100
+    */
+   	e1(n);av(a,n);
+	int ans=1;
+	fl(i,0,n){
+		fl(j,i+1,n){
+			int x=a[i],y=a[j];
+			if(x<y){
+				swap(x,y);
+			}
+			int diff=x-y;
+			for(int k=1;k*k<=diff;k++){
+				if(diff%k==0){
+					int f1=max(k,diff/k);
+					int f2=min(k,diff/k);
+					int u=(f1+f2)/2;
+					int v=(f1-f2)/2;
+					if((u+v)==f1 && (u-v)==f2){
+                        // pr(f1,f2,u,v);
+                        // pr(a[i],a[j]);
+						int xx=(u*u)-x;
+						int tmp=0;
+						for(int l=0;l<n;l++){
+							int num=sqrtl(a[l]+xx);
+							if(num*num==a[l]+xx){
+								tmp++;
+							}
+						}
+                        // pr(xx,tmp);
+						if(xx>=0) ans=max(ans,tmp);
+					}
+				}
+			}
+		}
+	}
+	cout<<ans<<endl;
 
 
 }
@@ -117,7 +119,7 @@ int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    // cin >> t;
+    cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

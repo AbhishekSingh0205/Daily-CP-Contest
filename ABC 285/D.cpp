@@ -1,4 +1,5 @@
 //Problem Link : 
+// Date : 
 #include <bits/stdc++.h>
 #include<ext/pb_ds/assoc_container.hpp>
 #include<ext/pb_ds/tree_policy.hpp>
@@ -71,55 +72,60 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
+// Overloading for mod
+
+
 void solve()
 {
-    /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    // Video Solution : https://www.youtube.com/watch?v=LfsQ0w1xHUc&ab_channel=CompetitiveCoding-NewtonSchool
-    // Awesomness = Number of Baricades + 1
-    e2(n,m);
-    av(a,n);
-    int ans=0;
-    fl(i,0,n-1){
-        if(a[i]!=a[i+1]){
-            ans+=((i+1)*(n-(i+1)));
-        }
+	/*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
+	int m;
+  cin >> m;
+  vector<string> a(m * 2);
+  for (int i = 0; i < m * 2; i++) {
+    cin >> a[i];
+  }                    
+  auto b = a;
+  sort(b.begin(), b.end());
+  int n = (int) (unique(b.begin(), b.end()) - b.begin());
+  vector<vector<int>> e(n);
+  for (int i = 0; i < m; i++) {
+    int u = (int) (lower_bound(b.begin(), b.begin() + n, a[i * 2]) - b.begin());
+    int v = (int) (lower_bound(b.begin(), b.begin() + n, a[i * 2 + 1]) - b.begin());
+    e[u].push_back(v);
+  }
+  vector<int> mark(n, -1);
+  function<bool(int)> dfs = [&](int v) {
+    for (int u : e[v]) {
+      if (mark[u] == -1) {
+        mark[u] = mark[v];
+        if (dfs(u)) return true;
+      }
+      else if (mark[u] == mark[v]) {
+        return true;
+      }
     }
-    ans+=(n*(n+1))/2;
-    fl(i,0,m){
-        e2(id,x);
-        id--;
-        int prev=ans;
-        if(id){
-            if((a[id]==a[id-1]) && (a[id]!=x)){
-                prev+=((id)*(n-id));
-            }
-            else if(a[id]!=a[id-1] && (a[id-1]==x)){
-                prev-=((id)*(n-id));
-            }
-        }
-        if(id+1<n){
-            if((a[id]==a[id+1]) && a[id]!=x){
-                prev+=((id+1)*(n-(id+1)));
-            }
-            else if(a[id]!=a[id+1] && a[id+1]==x){
-                prev-=((id+1)*(n-(id+1)));
-            }
-        }
-        a[id]=x;
-        ans=prev;
-        cout<<ans<<endl;
+    return false;
+  };
+  int ans = 0;
+  for (int c = 0; c < n; c++) {
+    if (mark[c] == -1) {
+      mark[c] = c;
+      ans |= dfs(c);
     }
+  }
+  cout << (ans ? "No" : "Yes");
 
 
 
 }
 int32_t main()
 {
-    __builtin_LIVU();
-    int t = 1;
-    // cin >> t;
-    fl(i, 1, t + 1) {
-        solve();
-    }
-    return 0;
+	__builtin_LIVU();
+	int t = 1;
+	// cin >> t;
+	fl(i, 1, t + 1) {
+		solve();
+	}
+	return 0;
 }
+  

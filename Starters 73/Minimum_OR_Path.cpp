@@ -74,41 +74,50 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    // Video Solution : https://www.youtube.com/watch?v=LfsQ0w1xHUc&ab_channel=CompetitiveCoding-NewtonSchool
-    // Awesomness = Number of Baricades + 1
-    e2(n,m);
-    av(a,n);
+    e1(n);av(a,n);
+    vi off(n,0);
     int ans=0;
-    fl(i,0,n-1){
-        if(a[i]!=a[i+1]){
-            ans+=((i+1)*(n-(i+1)));
+    bool last=0;
+    for(int i=22;i>=0;i--){
+        int reach=0;
+        int num=(1<<i);
+        vi tmp(n,1);
+        if((a[0]&(num))||(a[n-1]&num)){
+            ans+=(1<<i);
+            C;
+        }
+        fl(j,1,n-1){
+            if(a[j]&num)tmp[j]=0;
+        }
+        bool is=false;
+        fl(j,0,n){
+            if(tmp[j]==0){
+                C;
+            }
+            if(tmp[j]==1 && reach<j){
+                is=true;B;
+            }
+            if((a[j]&num)==0 && off[j]==0){
+                reach=max(reach,j+a[j]);
+            }
+        }
+        if(is){
+            ans+=(1<<i);
+        }
+        else{
+            fl(j,0,n){
+                off[j]=max(1-tmp[j],off[j]);
+            }
+        }
+        if(reach>=n-1){
+            last=1;
         }
     }
-    ans+=(n*(n+1))/2;
-    fl(i,0,m){
-        e2(id,x);
-        id--;
-        int prev=ans;
-        if(id){
-            if((a[id]==a[id-1]) && (a[id]!=x)){
-                prev+=((id)*(n-id));
-            }
-            else if(a[id]!=a[id-1] && (a[id-1]==x)){
-                prev-=((id)*(n-id));
-            }
-        }
-        if(id+1<n){
-            if((a[id]==a[id+1]) && a[id]!=x){
-                prev+=((id+1)*(n-(id+1)));
-            }
-            else if(a[id]!=a[id+1] && a[id+1]==x){
-                prev-=((id+1)*(n-(id+1)));
-            }
-        }
-        a[id]=x;
-        ans=prev;
-        cout<<ans<<endl;
+    pr(ans);
+    if(ans<=(1<<20)){
+        cout<<ans<<endl;R;
     }
+    cout<<-1<<endl;
 
 
 
@@ -117,7 +126,7 @@ int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    // cin >> t;
+    cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

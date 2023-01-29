@@ -71,44 +71,86 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
+// Overloading for mod
+
+struct mint
+{
+    int val;
+    mint(int _val = 0)
+    {
+        val = _val % mod;
+    }
+    mint operator+(mint oth)
+    {
+        return val + oth.val;
+    }
+    mint operator*(mint oth)
+    {
+        return 1LL * val * oth.val;
+    }
+    mint operator-(mint oth)
+    {
+        return val - oth.val + mod;
+    }
+    void operator+=(mint oth)
+    {
+        val = (mint(val) + oth).val;
+    }
+    void operator-=(mint oth)
+    {
+        val = (mint(val) - oth).val;
+    }
+    void operator*=(mint oth)
+    {
+        val = (mint(val) * oth).val;
+    }
+};
+bool cmp(pii a,pii b){
+	if(a.ff<b.ff){
+		return true;
+	}
+	if(a.ff==b.ff){
+		if(a.ss>b.ss){
+			return true;
+		}
+		return false;
+	}
+	return false;
+}
 void solve()
 {
-    /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    // Video Solution : https://www.youtube.com/watch?v=LfsQ0w1xHUc&ab_channel=CompetitiveCoding-NewtonSchool
-    // Awesomness = Number of Baricades + 1
-    e2(n,m);
-    av(a,n);
-    int ans=0;
-    fl(i,0,n-1){
-        if(a[i]!=a[i+1]){
-            ans+=((i+1)*(n-(i+1)));
+    /*
+        It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next 
+		buddy.
+    */
+   	e2(n,m);
+	e1(k);
+	vector<pii>a(k);
+	fl(i,0,k){
+		e2(x,y);
+		a[i]=mp(x,y);
+	} 
+	sort(all(a),cmp);
+	vi tp; 
+	fl(i,0,k){
+		if(a[i].ff!=n && a[i].ss!=m) tp.pb(a[i].ss);
+	}
+    set<int>st;
+    for(int i=0;i<tp.size();i++){
+        auto it=st.LB(tp[i]);
+        if(it==st.end()){
+            st.insert(tp[i]);
+        }
+        else{
+            st.erase(it);
+            st.insert(tp[i]);
         }
     }
-    ans+=(n*(n+1))/2;
-    fl(i,0,m){
-        e2(id,x);
-        id--;
-        int prev=ans;
-        if(id){
-            if((a[id]==a[id-1]) && (a[id]!=x)){
-                prev+=((id)*(n-id));
-            }
-            else if(a[id]!=a[id-1] && (a[id-1]==x)){
-                prev-=((id)*(n-id));
-            }
-        }
-        if(id+1<n){
-            if((a[id]==a[id+1]) && a[id]!=x){
-                prev+=((id+1)*(n-(id+1)));
-            }
-            else if(a[id]!=a[id+1] && a[id+1]==x){
-                prev-=((id+1)*(n-(id+1)));
-            }
-        }
-        a[id]=x;
-        ans=prev;
-        cout<<ans<<endl;
-    }
+    int res=st.size();
+	int ans=n+m-2-res;
+	cout<<ans<<endl;
+
+
 
 
 
@@ -117,7 +159,7 @@ int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    // cin >> t;
+    cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

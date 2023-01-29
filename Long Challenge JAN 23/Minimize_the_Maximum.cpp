@@ -71,53 +71,48 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
+bool good(vi a,int mid){
+    int n=a.size();
+    if(a[0]>mid){
+        return false;
+    }
+    for(int i=1;i<n;i++){
+        int diff=max(0ll,mid-a[i-1]);
+        a[i]-=diff;
+    }
+    fl(i,0,n){
+        if(a[i]>mid){
+            return false;
+        }
+    }
+    return true;
+}
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    // Video Solution : https://www.youtube.com/watch?v=LfsQ0w1xHUc&ab_channel=CompetitiveCoding-NewtonSchool
-    // Awesomness = Number of Baricades + 1
-    e2(n,m);
+    e1(n);
     av(a,n);
-    int ans=0;
-    fl(i,0,n-1){
-        if(a[i]!=a[i+1]){
-            ans+=((i+1)*(n-(i+1)));
+    int l=0,h=inf;
+    int ans=h;
+    while(l<=h){
+        int mid=(l+h)/2;
+        if(good(a,mid)){
+            // pr(mid);
+            ans=mid;
+            h=mid-1;
+        }
+        else{
+            l=mid+1;
         }
     }
-    ans+=(n*(n+1))/2;
-    fl(i,0,m){
-        e2(id,x);
-        id--;
-        int prev=ans;
-        if(id){
-            if((a[id]==a[id-1]) && (a[id]!=x)){
-                prev+=((id)*(n-id));
-            }
-            else if(a[id]!=a[id-1] && (a[id-1]==x)){
-                prev-=((id)*(n-id));
-            }
-        }
-        if(id+1<n){
-            if((a[id]==a[id+1]) && a[id]!=x){
-                prev+=((id+1)*(n-(id+1)));
-            }
-            else if(a[id]!=a[id+1] && a[id+1]==x){
-                prev-=((id+1)*(n-(id+1)));
-            }
-        }
-        a[id]=x;
-        ans=prev;
-        cout<<ans<<endl;
-    }
-
-
+    cout<<ans<<endl;
 
 }
 int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    // cin >> t;
+    cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

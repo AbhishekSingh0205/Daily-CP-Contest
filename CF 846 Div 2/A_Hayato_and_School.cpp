@@ -74,40 +74,37 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    // Video Solution : https://www.youtube.com/watch?v=LfsQ0w1xHUc&ab_channel=CompetitiveCoding-NewtonSchool
-    // Awesomness = Number of Baricades + 1
-    e2(n,m);
+    e1(n);
     av(a,n);
-    int ans=0;
-    fl(i,0,n-1){
-        if(a[i]!=a[i+1]){
-            ans+=((i+1)*(n-(i+1)));
+    int cnto=0,cnte=0;
+    vector<int>od;
+    vector<int>ev;
+    fl(i,0,n){
+        if(a[i]%2){
+            cnto++;
+            od.pb(i);
+        }
+        else{
+            cnte++;
+            ev.pb(i);
         }
     }
-    ans+=(n*(n+1))/2;
-    fl(i,0,m){
-        e2(id,x);
-        id--;
-        int prev=ans;
-        if(id){
-            if((a[id]==a[id-1]) && (a[id]!=x)){
-                prev+=((id)*(n-id));
-            }
-            else if(a[id]!=a[id-1] && (a[id-1]==x)){
-                prev-=((id)*(n-id));
-            }
+    if(cnto==0||(cnto==2 && n==3)){
+        cout<<"NO"<<endl;R;
+    }
+    if(cnto<3){
+        cout<<"YES"<<endl;
+        for(int i=0;i<2;i++){
+            cout<<ev[i]+1<<" ";
         }
-        if(id+1<n){
-            if((a[id]==a[id+1]) && a[id]!=x){
-                prev+=((id+1)*(n-(id+1)));
-            }
-            else if(a[id]!=a[id+1] && a[id+1]==x){
-                prev-=((id+1)*(n-(id+1)));
-            }
+        cout<<od[0]+1<<endl;R;
+    }
+    else{
+        cout<<"YES"<<endl;
+        for(int i=0;i<3;i++){
+            cout<<od[i]+1<<" ";
         }
-        a[id]=x;
-        ans=prev;
-        cout<<ans<<endl;
+        cout<<endl;R;
     }
 
 
@@ -117,7 +114,7 @@ int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    // cin >> t;
+    cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

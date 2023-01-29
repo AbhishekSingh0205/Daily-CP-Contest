@@ -71,53 +71,94 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
+// Overloading for mod
+
+struct mint
+{
+    int val;
+    mint(int _val = 0)
+    {
+        val = _val % mod;
+    }
+    mint operator+(mint oth)
+    {
+        return val + oth.val;
+    }
+    mint operator*(mint oth)
+    {
+        return 1LL * val * oth.val;
+    }
+    mint operator-(mint oth)
+    {
+        return val - oth.val + mod;
+    }
+    void operator+=(mint oth)
+    {
+        val = (mint(val) + oth).val;
+    }
+    void operator-=(mint oth)
+    {
+        val = (mint(val) - oth).val;
+    }
+    void operator*=(mint oth)
+    {
+        val = (mint(val) * oth).val;
+    }
+};
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    // Video Solution : https://www.youtube.com/watch?v=LfsQ0w1xHUc&ab_channel=CompetitiveCoding-NewtonSchool
-    // Awesomness = Number of Baricades + 1
-    e2(n,m);
+    e1(n);
     av(a,n);
-    int ans=0;
-    fl(i,0,n-1){
-        if(a[i]!=a[i+1]){
-            ans+=((i+1)*(n-(i+1)));
+    // pr(a);
+    fl(i,0,22){
+        // Off
+        vi c=a;
+        int prev=0;
+        fl(j,0,n-1){
+            if((a[j]&1)){
+                prev=1;
+            }
+            else{
+                prev=0;
+            }
+            a[j]^=prev;
+            a[j+1]^=prev;
+        }
+        bool is=true;
+        fl(j,0,n){
+            if((a[j]&1)!=0)is=false;
+        }
+        bool is2=true;
+        a=c;
+        fl(j,0,n-1){
+            if((a[j]&1)==0){
+                prev=1;
+            }
+            else{
+                prev=0;
+            }
+            a[j]^=prev;
+            a[j+1]^=prev;
+        }
+        fl(j,0,n){
+            if((a[j]&1)!=1)is2=false;
+        }
+        if(!(is||is2)){
+            cout<<"NO"<<endl;R;
+        }
+        fl(j,0,n){
+            a[j]/=2;
         }
     }
-    ans+=(n*(n+1))/2;
-    fl(i,0,m){
-        e2(id,x);
-        id--;
-        int prev=ans;
-        if(id){
-            if((a[id]==a[id-1]) && (a[id]!=x)){
-                prev+=((id)*(n-id));
-            }
-            else if(a[id]!=a[id-1] && (a[id-1]==x)){
-                prev-=((id)*(n-id));
-            }
-        }
-        if(id+1<n){
-            if((a[id]==a[id+1]) && a[id]!=x){
-                prev+=((id+1)*(n-(id+1)));
-            }
-            else if(a[id]!=a[id+1] && a[id+1]==x){
-                prev-=((id+1)*(n-(id+1)));
-            }
-        }
-        a[id]=x;
-        ans=prev;
-        cout<<ans<<endl;
-    }
-
-
+    cout<<"YES"<<endl;
 
 }
 int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    // cin >> t;
+    cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

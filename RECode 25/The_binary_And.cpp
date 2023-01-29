@@ -71,44 +71,32 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
+int sum=0;
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    // Video Solution : https://www.youtube.com/watch?v=LfsQ0w1xHUc&ab_channel=CompetitiveCoding-NewtonSchool
-    // Awesomness = Number of Baricades + 1
-    e2(n,m);
-    av(a,n);
-    int ans=0;
-    fl(i,0,n-1){
-        if(a[i]!=a[i+1]){
-            ans+=((i+1)*(n-(i+1)));
-        }
+    // 10001 -> 10101 
+    e1(n);av(a,n);
+    assert(n>=1 && n<=200000);
+    fl(i,0,n){
+        assert(a[i]>=0 && a[i]<=1000000000000);
     }
-    ans+=(n*(n+1))/2;
-    fl(i,0,m){
-        e2(id,x);
-        id--;
-        int prev=ans;
-        if(id){
-            if((a[id]==a[id-1]) && (a[id]!=x)){
-                prev+=((id)*(n-id));
-            }
-            else if(a[id]!=a[id-1] && (a[id-1]==x)){
-                prev-=((id)*(n-id));
-            }
-        }
-        if(id+1<n){
-            if((a[id]==a[id+1]) && a[id]!=x){
-                prev+=((id+1)*(n-(id+1)));
-            }
-            else if(a[id]!=a[id+1] && a[id+1]==x){
-                prev-=((id+1)*(n-(id+1)));
+    sum+=n;
+    assert(n>=1 && n<=10000000);
+    int ans=inf;
+    for(int i=41;i>=0;i--){
+        int num=0;
+        int l=(1ll<<i);
+        fl(j,0,n){
+            int tmp=a[j];
+            tmp|=l;
+            if(__builtin_popcountll(tmp^a[j])==1){
+                num++;
             }
         }
-        a[id]=x;
-        ans=prev;
-        cout<<ans<<endl;
+        ans=min(ans,num+i);
     }
+    cout<<ans<<endl;
 
 
 
@@ -117,7 +105,7 @@ int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    // cin >> t;
+    cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

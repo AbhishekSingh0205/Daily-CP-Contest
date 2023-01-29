@@ -22,7 +22,7 @@ template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order
 #define rz resize
 #define vvi vector<vector<int>>
 #define sz(s) s.size()
-#define mod 2
+#define mod 998244353
 #define ff first
 #define ss second
 #define inf 10e15
@@ -74,41 +74,58 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    // Video Solution : https://www.youtube.com/watch?v=LfsQ0w1xHUc&ab_channel=CompetitiveCoding-NewtonSchool
-    // Awesomness = Number of Baricades + 1
-    e2(n,m);
-    av(a,n);
+    e1(n);
+    es(a);es(b);
+    int sum1=0;
+    int sum2=0;
+    int pw=1;
+    reverse(all(a));
+    reverse(all(b));
+    fl(i,0,n){
+        int prdct=((a[i]-'0')-(b[i]-'0'));
+        if(sum2-sum1){
+            prdct*=(sum2-sum1);
+        }
+        if(prdct>0){
+            swap(a[i],b[i]);
+        }
+        int k1=a[i]*pw;
+        k1%=mod;
+        sum1+=k1;
+        int k2=b[i]*pw;
+        k2%=mod;
+        sum2+=k2;
+        sum1%=mod;
+        sum2%=mod;
+        pw*=10;
+    }
     int ans=0;
-    fl(i,0,n-1){
-        if(a[i]!=a[i+1]){
-            ans+=((i+1)*(n-(i+1)));
+    int arr[n];memset(arr,0,sizeof arr);
+    reverse(all(a));
+    for(int i=0;i<n;i++){
+        arr[i]=a[i]-'0';
+        if(i){
+            arr[i]+=(arr[i-1]*10);
+            arr[i]%=mod;
         }
+        arr[i]%=mod;
+        
     }
-    ans+=(n*(n+1))/2;
-    fl(i,0,m){
-        e2(id,x);
-        id--;
-        int prev=ans;
-        if(id){
-            if((a[id]==a[id-1]) && (a[id]!=x)){
-                prev+=((id)*(n-id));
-            }
-            else if(a[id]!=a[id-1] && (a[id-1]==x)){
-                prev-=((id)*(n-id));
-            }
-        }
-        if(id+1<n){
-            if((a[id]==a[id+1]) && a[id]!=x){
-                prev+=((id+1)*(n-(id+1)));
-            }
-            else if(a[id]!=a[id+1] && a[id+1]==x){
-                prev-=((id+1)*(n-(id+1)));
-            }
-        }
-        a[id]=x;
-        ans=prev;
-        cout<<ans<<endl;
+    pw=1;
+    for(int i=0;i<n;i++){
+        int num=b[i]-'0';
+        num*=pw;
+        num%=mod;
+        num*=arr[n-1];
+        num%=mod;
+        pw*=10;
+        pw%=mod;
+        ans+=num;
+        ans%=mod;
     }
+    cout<<ans<<endl;
+
+
 
 
 

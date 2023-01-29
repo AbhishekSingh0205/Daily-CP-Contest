@@ -3,8 +3,9 @@
 #include<ext/pb_ds/assoc_container.hpp>
 #include<ext/pb_ds/tree_policy.hpp>
 using namespace std;
+#define ll long long
 using namespace __gnu_pbds;
-#define int long long int
+// #define int long long int
 typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
 // Instead of less<int>, we can use greater<int>, less_equal<int> for descending, and having multiple occurence respectivly
 template<class T> using oset =tree<T, null_type, less<T>, rb_tree_tag,tree_order_statistics_node_update> ;
@@ -71,44 +72,50 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
+
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    // Video Solution : https://www.youtube.com/watch?v=LfsQ0w1xHUc&ab_channel=CompetitiveCoding-NewtonSchool
-    // Awesomness = Number of Baricades + 1
-    e2(n,m);
-    av(a,n);
-    int ans=0;
-    fl(i,0,n-1){
-        if(a[i]!=a[i+1]){
-            ans+=((i+1)*(n-(i+1)));
-        }
-    }
-    ans+=(n*(n+1))/2;
-    fl(i,0,m){
-        e2(id,x);
-        id--;
-        int prev=ans;
-        if(id){
-            if((a[id]==a[id-1]) && (a[id]!=x)){
-                prev+=((id)*(n-id));
-            }
-            else if(a[id]!=a[id-1] && (a[id-1]==x)){
-                prev-=((id)*(n-id));
-            }
-        }
-        if(id+1<n){
-            if((a[id]==a[id+1]) && a[id]!=x){
-                prev+=((id+1)*(n-(id+1)));
-            }
-            else if(a[id]!=a[id+1] && a[id+1]==x){
-                prev-=((id+1)*(n-(id+1)));
-            }
-        }
-        a[id]=x;
-        ans=prev;
-        cout<<ans<<endl;
-    }
+    ll int n,m,h;
+      cin>>n>>m>>h;
+      vector<ll int>v;
+      for(int i=0;i<n;i++)
+      {
+          ll int x,y;
+          cin>>x>>y;
+          v.push_back(y);
+      }
+      sort(v.begin(),v.end());
+      reverse(v.begin(),v.end());
+      ll int ans=v[0];
+      ll int l=1,r=1e17;
+      while(l<=r)
+      {
+          ll int mid=(l+r)/2;
+          ll int x=0;
+          ll int i=0;
+          while(i<n)
+          {
+              ll int val=(mid+1-v[i])/(2ll*h);
+              if(val<=0)
+              {
+                  x=m+1;
+                  break;
+              }
+              i+=val;
+              x++;
+          }
+          if(x<=m)
+          {
+              ans=mid;
+              r=mid-1;
+          }
+          else
+          {
+              l=mid+1;
+          }
+      }
+      cout<<ans<<endl;
 
 
 
@@ -117,7 +124,7 @@ int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    // cin >> t;
+    cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }

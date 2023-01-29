@@ -1,4 +1,6 @@
-//Problem Link : 
+//Problem Link : https://codeforces.com/problemset/problem/1735/D
+// Date : 10th January 2022
+// Problem Count =1 
 #include <bits/stdc++.h>
 #include<ext/pb_ds/assoc_container.hpp>
 #include<ext/pb_ds/tree_policy.hpp>
@@ -71,55 +73,82 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #define pra(a,n){}
 #define prm(mat,row,col){}
 #endif
+
+
+bool good(int a,int b){
+	 int num=0;
+	 int curr=1;
+	 while(a||b){
+	 	if(a%3 && b%3 && (a%3==b%3)){
+			return false;
+		}
+	 	a/=3;b/=3;
+	 }
+	 return true;
+}
 void solve()
 {
-    /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    // Video Solution : https://www.youtube.com/watch?v=LfsQ0w1xHUc&ab_channel=CompetitiveCoding-NewtonSchool
-    // Awesomness = Number of Baricades + 1
-    e2(n,m);
-    av(a,n);
-    int ans=0;
-    fl(i,0,n-1){
-        if(a[i]!=a[i+1]){
-            ans+=((i+1)*(n-(i+1)));
-        }
-    }
-    ans+=(n*(n+1))/2;
-    fl(i,0,m){
-        e2(id,x);
-        id--;
-        int prev=ans;
-        if(id){
-            if((a[id]==a[id-1]) && (a[id]!=x)){
-                prev+=((id)*(n-id));
-            }
-            else if(a[id]!=a[id-1] && (a[id-1]==x)){
-                prev-=((id)*(n-id));
-            }
-        }
-        if(id+1<n){
-            if((a[id]==a[id+1]) && a[id]!=x){
-                prev+=((id+1)*(n-(id+1)));
-            }
-            else if(a[id]!=a[id+1] && a[id+1]==x){
-                prev-=((id+1)*(n-(id+1)));
-            }
-        }
-        a[id]=x;
-        ans=prev;
-        cout<<ans<<endl;
-    }
+	/*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
+	/*
+		Topic : Simple Combontrics
+		My Approach : 
+		Hint : For every two cards, there is always a single card (if it is present) that forms a set with them.
+				[1] That means that two sets can share at most one card.
+			We will calculate for each card that how many pair of cards have that card as required 
+			to form a set.
 
-
-
+			Now we will iterate for each card and we need to take only two pair of cards for that card in
+			common.
+	*/
+	e2(n,k);
+	map<int,int>m;
+	vi a;
+	fl(i,0,n){
+		int num=0;
+		int curr=1;
+		fl(j,0,k){
+			e1(x);
+			num+=(x*curr);
+			curr*=3;
+		}
+		a.pb(num);
+	}
+	fl(i,0,n){
+		m[a[i]]=0;
+	}
+	fl(i,0,n){
+		fl(j,i+1,n){
+			if(good(a[i],a[j])){
+				int n1=a[i],n2=a[j];
+				int curr=1;
+				int num=0;
+				while(n1||n2){
+					if(n1%3||n2%3){
+						int rem=n1%3+n2%3;
+						num+=(curr*(3-rem));
+					}
+					curr*=3;
+					n1/=3;n2/=3;
+				}
+				if(m.find(num)!=m.end()){
+					m[num]++;
+				}
+			}
+		}
+	}
+	int ans=0;
+	for(auto v:m){
+		ans+=(v.ss*(v.ss-1))/2;
+	}
+	cout<<ans<<endl;
 }
 int32_t main()
 {
-    __builtin_LIVU();
-    int t = 1;
-    // cin >> t;
-    fl(i, 1, t + 1) {
-        solve();
-    }
-    return 0;
+	__builtin_LIVU();
+	int t = 1;
+	// cin >> t;
+	fl(i, 1, t + 1) {
+		solve();
+	}
+	return 0;
 }

@@ -74,41 +74,34 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 void solve()
 {
     /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
-    // Video Solution : https://www.youtube.com/watch?v=LfsQ0w1xHUc&ab_channel=CompetitiveCoding-NewtonSchool
-    // Awesomness = Number of Baricades + 1
     e2(n,m);
     av(a,n);
-    int ans=0;
-    fl(i,0,n-1){
-        if(a[i]!=a[i+1]){
-            ans+=((i+1)*(n-(i+1)));
-        }
+    map<int,int>mm;
+    fl(i,0,n){
+        mm[a[i]]++;
     }
-    ans+=(n*(n+1))/2;
+    av(b,m);
+    multiset<int>st;
     fl(i,0,m){
-        e2(id,x);
-        id--;
-        int prev=ans;
-        if(id){
-            if((a[id]==a[id-1]) && (a[id]!=x)){
-                prev+=((id)*(n-id));
-            }
-            else if(a[id]!=a[id-1] && (a[id-1]==x)){
-                prev-=((id)*(n-id));
-            }
-        }
-        if(id+1<n){
-            if((a[id]==a[id+1]) && a[id]!=x){
-                prev+=((id+1)*(n-(id+1)));
-            }
-            else if(a[id]!=a[id+1] && a[id+1]==x){
-                prev-=((id+1)*(n-(id+1)));
-            }
-        }
-        a[id]=x;
-        ans=prev;
-        cout<<ans<<endl;
+        st.insert(-1*b[i]);
     }
+    multiset<int>st2;
+    for(auto v:mm){
+        st2.insert(-1*v.ss);
+    }
+    int ans=0;
+    while(st.size() && st2.size()){
+        int frnt=min(abs(*st.begin()),abs(*st2.begin()));
+        ans+=frnt;
+        st.erase(st.begin());
+        int val=abs(*st2.begin());
+        val-=frnt;
+        st2.erase(st2.begin());
+        if(val){
+            st2.insert(-1*val);
+        }
+    }
+    cout<<ans<<endl;
 
 
 
@@ -117,7 +110,7 @@ int32_t main()
 {
     __builtin_LIVU();
     int t = 1;
-    // cin >> t;
+    cin >> t;
     fl(i, 1, t + 1) {
         solve();
     }
