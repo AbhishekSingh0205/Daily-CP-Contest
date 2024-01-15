@@ -73,7 +73,7 @@ template<class T, class...S>void dbs(string str, T t, S... s) {int idx = str.fin
 #endif
 vector<char>a;
 vi par;
-vi gr[1001];
+vi gr[5005];
 void dfs1(int src,int pare){
     par[src]=pare;
     for(auto v:gr[src]){
@@ -84,12 +84,13 @@ void dfs1(int src,int pare){
 }
 
 // Trie Template Snippet Starts
+int ans=0;
 class Vertex{
     public:
-        vi isEnd;
+        int prefixEnd;
         vector<int>next;
         Vertex(int k){
-            isEnd.resize(0);
+            prefixEnd=0;
             next.resize(k,-1);
         }
 };
@@ -121,114 +122,49 @@ class Trie{
                 cur=nodes[cur].next[c-'a'];
             }
         }
-        // lst is just temporary and s is also temporary
-        // t.print(0,temp,tmp2)
-        void print(int x, vector<bool> &lst, string &s)
-        {
-            for(int i=0; i<((int)lst.size())-1; i++)
-            {
-                if(lst[i]) cout<<"   ";
-                else cout<<"|  ";
-            }
-            if(!lst.empty()) cout<<"|--";
-
-            cout<<x<<' '<<s<<' '<<' ';
-            for(auto v:nodes[x].isEnd){
-                cout<<v<<" ";
-            }
-            cout<<endl;
-
-            int mx = -1;
-            for(int i=0; i<K; i++)
-                if(nodes[x].next[i] != -1)
-                    mx = i;
-            
-            lst.push_back(false);
-            for(int i=0; i<K; i++)
-            {
-                if(nodes[x].next[i] != -1)
-                {
-                    s.push_back('a' + i);
-                    if(i == mx) lst.back() = true;
-
-                    print(nodes[x].next[i], lst, s);
-
-                    s.pop_back();
-                }
-            }
-            lst.pop_back();
-            return;
-        }
-        void pb(int curr,char c,int qType){
-            if(nodes[curr].next[c-'a']==-1){
-                nodes[curr].next[c-'a']=nodes.size();
+        void insert(int currL,char c){
+            if(nodes[currL].next[c-'a']==-1){
+                nodes[currL].next[c-'a']=nodes.size();
                 nodes.push_back(Vertex(K));
             }
-            curr=nodes[curr].next[c-'a'];
-            if(qType==0||nodes[curr].isEnd.size()==0){
-                nodes[curr].isEnd.pb(1);
-            }
-            else{
-                int num=nodes[curr].isEnd.back();
-                nodes[curr].isEnd.pop_back();
-                num++;
-                nodes[curr].isEnd.pb(num);
-            }
+            currL=nodes[currL].next[c-'a'];
+            nodes[currL].prefixEnd++;
         }
-        int dfs(int curr){
-            int ans=0;
-            int sum=0;
-            int sumsq=0;
-            for(auto v:nodes[curr].isEnd){
-                sum+=v;
-                sumsq+=(v*v);
-            }
-            sum*=sum;
-            sum-=sumsq;
-            sum/=2;
-            ans+=sum;
-            for(int i=0;i<26;i++){
-                if(nodes[curr].next[i]!=-1){
-                    ans+=dfs(nodes[curr].next[i]);
-                }
-            } 
-            return ans;
-        }
+        
 };
 // Trie Template Ends
-
-void dfs(int src,int curr, Trie &t,int qType,int val){
-    // pr(src,curr,qType);
-    t.pb(curr,a[src],qType);
-    int arr[26];memset(arr,0,sizeof arr);
+void dfs(int src,int currL,Trie &t){
+    if(t.nodes[currL].next[a[src]-'a']==-1){
+        return;
+    }
+    currL=t.nodes[currL].next[a[src]-'a'];
+    ans+=(t.nodes[currL].prefixEnd);
     for(auto v:gr[src]){
         if(v!=par[src]){
-            int tmp=curr;
-            tmp=t.nodes[curr].next[a[src]-'a'];
-            arr[a[v]-'a']++;
-            if(tmp==1){
-                arr[a[v]-'a']=1;
-            }
-            int tVal=max(arr[a[v]-'a'],val);
-            if(tVal==1||tmp==1){
-                dfs(v,tmp,t,0,tVal);
-            }
-            else{
-                dfs(v,tmp,t,1,tVal);
-            }
-            // dfs(v,tmp,t);
+            dfs(v,currL,t);
         }
     }
 }
+void insert(int src,int currL,Trie &t){
+    t.insert(currL,a[src]);
+    currL=t.nodes[currL].next[a[src]-'a'];
+    for(auto v:gr[src]){
+        if(v!=par[src]){
+            insert(v,currL,t);
+        }
+    }
+
+}
 void solve()
 {
-    /*It's WA on 2, oh cleared, This shit is onna get me TLE. Better luck next time buddy.*/
     /*
         Har ake node ke liye wapas se dfs krenge and will store every string.
     */
     e1(n);
     a.resize(0);
     a.resize(n);
+    par.resize(0);
+    par.resize(n,0);
     fl(i,0,n)cin>>a[i];
     // pr(a);
     for(int i=0;i<n;i++){
@@ -239,26 +175,30 @@ void solve()
         gr[x].pb(y);
         gr[y].pb(x);
     }
-    par.resize(0);
-    par.resize(n,-1);
     dfs1(0,-1);
-    // pr("Hello");
-    vi res(n,0);
+    int res[n];
+    fl(i,0,n){
+        res[i]=1;
+    }
     for(int i=0;i<n;i++){
+        ans=0;
         Trie t(26);
-        // pr(i,"S");
-        dfs(i,0,t,0,1);
-        // pr(i,"D");
-        res[i]=t.dfs(0)+1;
-        // vector<bool>tmp;
-        // string tmp2;
-        // t.print(0,tmp,tmp2);
+        t.insert(0,a[i]);
+        for(auto v:gr[i]){
+            if(v!=par[i]){
+                int currL=t.nodes[0].next[a[i]-'a'];
+                dfs(v,currL,t);
+                insert(v,currL,t);
+            }
+
+        }
+        res[i]=ans+1;
     }
     e1(q);
     for(int i=0;i<q;i++){
         e1(x);
         x--;
-        cout<<res[x]<<endl;
+        cout<<res[x]<<"\n";
     }
 }
 int32_t main()
